@@ -7,6 +7,8 @@ import { useCart } from "@/contexts/CartContext";
 import { useCreateCheckoutSession } from "./-hooks/use-create-checkout-session";
 import { useCheckCartAvailability } from "./-hooks/use-check-cart-availability";
 import { Trash2, ShoppingCart, CreditCard, AlertTriangle } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/cart")({
   component: Cart,
@@ -14,7 +16,14 @@ export const Route = createFileRoute("/cart")({
 
 function Cart() {
   const { cart, removeFromCart, updateItemQuantity, clearCart } = useCart();
-  const createCheckoutSession = useCreateCheckoutSession();
+  const queryClient = useQueryClient();
+
+  const createCheckoutSession = useCreateCheckoutSession({
+    onArtworkSoldOut: (soldOutItems) => {
+      queryClient.invalidateQueries({ queryKey: ["cart-availability"] });
+    },
+  });
+
   const { data: availabilityData, isLoading: isCheckingAvailability } =
     useCheckCartAvailability(cart.items);
 
@@ -100,7 +109,7 @@ function Cart() {
                           <h3 className="font-semibold text-lg">
                             {item.title}
                           </h3>
-                          <p className="text-2xl font-bold text-primary">
+                          <p className="text-2xl font-bold text-gradient-primary">
                             ${(item.price * item.quantity).toFixed(2)}
                           </p>
                           <p className="text-sm text-muted-foreground">
@@ -149,6 +158,14 @@ function Cart() {
                   <CardTitle>Order Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {isCheckingAvailability && (
+                    <div className="flex items-center gap-2 p-3 bg-blue-100 dark:bg-blue-900/30 rounded-md">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                        Checking item availability...
+                      </span>
+                    </div>
+                  )}
                   <div className="space-y-2">
                     {cart.items.map((item) => (
                       <div
@@ -186,7 +203,20 @@ function Cart() {
                   <Button
                     className="w-full"
                     size="lg"
-                    onClick={() => createCheckoutSession.mutate(cart.items)}
+                    onClick={() => {
+                      // Only proceed if availability check is complete and all items are available
+                      if (isCheckingAvailability) {
+                        return; // Don't proceed if still checking
+                      }
+
+                      if (
+                        (availabilityData?.unavailableItems.length ?? 0) > 0
+                      ) {
+                        return; // Don't proceed if there are unavailable items
+                      }
+
+                      createCheckoutSession.mutate(cart.items);
+                    }}
                     disabled={
                       createCheckoutSession.isPending ||
                       isCheckingAvailability ||
@@ -196,12 +226,12 @@ function Cart() {
                     {createCheckoutSession.isPending ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Processing...
+                        Creating checkout session...
                       </>
                     ) : isCheckingAvailability ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Checking availability...
+                        Verifying availability...
                       </>
                     ) : (availabilityData?.unavailableItems.length ?? 0) > 0 ? (
                       <>

@@ -24,7 +24,9 @@ export function useCheckCartAvailability(items: CartItem[]) {
       return { availableItems, unavailableItems };
     },
     enabled: items.length > 0,
-    refetchInterval: 30000, // Refetch every 30 seconds
-    staleTime: 10000, // Consider data fresh for 10 seconds
+    refetchInterval: 15000, // Refetch every 15 seconds (reduced from 30)
+    staleTime: 5000, // Consider data fresh for 5 seconds (reduced from 10)
+    refetchOnWindowFocus: false, // Refetch when window regains focus
+    refetchOnMount: true, // Always refetch when component mounts
   });
 }

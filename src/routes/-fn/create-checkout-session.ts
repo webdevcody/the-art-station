@@ -53,10 +53,12 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       );
 
       if (unavailableArtworks.length > 0) {
-        const unavailableTitles = unavailableArtworks.map((item) => item.title);
-        throw new Error(
-          `Some items are no longer available: ${unavailableTitles.join(", ")}`
-        );
+        // Return structured data about sold out items instead of throwing
+        return {
+          success: false,
+          soldOutItems: unavailableArtworks,
+          error: `Some items are no longer available: ${unavailableArtworks.map((item) => item.title).join(", ")}`,
+        };
       }
 
       // Initialize Stripe with proper error handling
@@ -102,7 +104,11 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         },
       });
 
-      return { sessionId: session.id, url: session.url };
+      return {
+        success: true,
+        sessionId: session.id,
+        url: session.url,
+      };
     } catch (error) {
       console.error("Error creating checkout session:", error);
 

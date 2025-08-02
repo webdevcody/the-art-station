@@ -104,7 +104,7 @@ function Browse() {
                         {artwork.description}
                       </p>
                     )}
-                    <p className="text-2xl font-bold text-primary">
+                    <p className="text-2xl font-bold bg-gradient-to-r from-gradient-primary to-gradient-secondary bg-clip-text text-transparent">
                       ${artwork.price.toFixed(2)}
                     </p>
                   </CardContent>

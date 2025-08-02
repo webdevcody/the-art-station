@@ -126,7 +126,7 @@ function ArtworkDetail() {
               <h1 className="text-3xl font-bold mb-2 text-foreground">
                 {artwork.title}
               </h1>
-              <p className="text-3xl font-bold text-primary">
+              <p className="text-3xl font-bold bg-gradient-to-r from-gradient-primary to-gradient-secondary bg-clip-text text-transparent">
                 ${artwork.price.toFixed(2)}
               </p>
             </div>
