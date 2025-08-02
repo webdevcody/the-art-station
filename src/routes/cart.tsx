@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCart } from "@/contexts/CartContext";
 import { useCreateCheckoutSession } from "./-hooks/use-create-checkout-session";
-import { Trash2, Plus, Minus, ShoppingCart, CreditCard } from "lucide-react";
+import { useCheckCartAvailability } from "./-hooks/use-check-cart-availability";
+import { Trash2, ShoppingCart, CreditCard, AlertTriangle } from "lucide-react";
 
 export const Route = createFileRoute("/cart")({
   component: Cart,
@@ -14,6 +15,8 @@ export const Route = createFileRoute("/cart")({
 function Cart() {
   const { cart, removeFromCart, updateItemQuantity, clearCart } = useCart();
   const createCheckoutSession = useCreateCheckoutSession();
+  const { data: availabilityData, isLoading: isCheckingAvailability } =
+    useCheckCartAvailability(cart.items);
 
   if (cart.items.length === 0) {
     return (
@@ -57,66 +60,86 @@ function Cart() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
-              {cart.items.map((item) => (
-                <Card key={item.id}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-20 h-20 bg-muted rounded-lg overflow-hidden flex-shrink-0">
-                        {item.imageData ? (
-                          <img
-                            src={item.imageData}
-                            alt={item.title}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-muted flex items-center justify-center">
-                            <span className="text-xs text-muted-foreground">
-                              No img
-                            </span>
-                          </div>
-                        )}
+              {cart.items.map((item) => {
+                const isUnavailable = availabilityData?.unavailableItems.some(
+                  (unavailableItem) =>
+                    unavailableItem.artworkId === item.artworkId
+                );
+
+                return (
+                  <Card
+                    key={item.id}
+                    className={`${isUnavailable ? "border-red-500 bg-red-50 dark:bg-red-950/20" : ""}`}
+                  >
+                    <CardContent className="p-4">
+                      {isUnavailable && (
+                        <div className="flex items-center gap-2 mb-3 p-2 bg-red-100 dark:bg-red-900/30 rounded-md">
+                          <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                          <span className="text-sm font-medium text-red-700 dark:text-red-300">
+                            This item is no longer available
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center space-x-4">
+                        <div className="w-20 h-20 bg-muted rounded-lg overflow-hidden flex-shrink-0">
+                          {item.imageData ? (
+                            <img
+                              src={item.imageData}
+                              alt={item.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-muted flex items-center justify-center">
+                              <span className="text-xs text-muted-foreground">
+                                No img
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-lg">
+                            {item.title}
+                          </h3>
+                          <p className="text-2xl font-bold text-primary">
+                            ${(item.price * item.quantity).toFixed(2)}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            ${item.price.toFixed(2)} each
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeFromCart(item.artworkId)}
+                            className="text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-lg">{item.title}</h3>
-                        <p className="text-2xl font-bold text-primary">
-                          ${(item.price * item.quantity).toFixed(2)}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          ${item.price.toFixed(2)} each
-                        </p>
+                      <div className="mt-4 pt-4 border-t">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-muted-foreground">
+                            Price per item:
+                          </span>
+                          <span className="font-semibold">
+                            ${item.price.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-sm text-muted-foreground">
+                            Total:
+                          </span>
+                          <span className="font-semibold">
+                            ${(item.price * item.quantity).toFixed(2)}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeFromCart(item.artworkId)}
-                          className="text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                    <div className="mt-4 pt-4 border-t">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">
-                          Price per item:
-                        </span>
-                        <span className="font-semibold">
-                          ${item.price.toFixed(2)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center mt-1">
-                        <span className="text-sm text-muted-foreground">
-                          Total:
-                        </span>
-                        <span className="font-semibold">
-                          ${(item.price * item.quantity).toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
 
             {/* Order Summary */}
@@ -150,16 +173,40 @@ function Cart() {
                       <span>${cart.total.toFixed(2)}</span>
                     </div>
                   </div>
+                  {(availabilityData?.unavailableItems.length ?? 0) > 0 && (
+                    <div className="flex items-center gap-2 p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-md mb-4">
+                      <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+                      <span className="text-sm text-yellow-700 dark:text-yellow-300">
+                        Please remove unavailable items before proceeding to
+                        checkout
+                      </span>
+                    </div>
+                  )}
+
                   <Button
                     className="w-full"
                     size="lg"
                     onClick={() => createCheckoutSession.mutate(cart.items)}
-                    disabled={createCheckoutSession.isPending}
+                    disabled={
+                      createCheckoutSession.isPending ||
+                      isCheckingAvailability ||
+                      (availabilityData?.unavailableItems.length ?? 0) > 0
+                    }
                   >
                     {createCheckoutSession.isPending ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                         Processing...
+                      </>
+                    ) : isCheckingAvailability ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Checking availability...
+                      </>
+                    ) : (availabilityData?.unavailableItems.length ?? 0) > 0 ? (
+                      <>
+                        <AlertTriangle className="h-4 w-4 mr-2" />
+                        Remove unavailable items
                       </>
                     ) : (
                       <>
@@ -168,11 +215,7 @@ function Cart() {
                       </>
                     )}
                   </Button>
-                  {createCheckoutSession.isError && (
-                    <p className="text-xs text-destructive text-center">
-                      Failed to create checkout session. Please try again.
-                    </p>
-                  )}
+                  {/* Error handling is now done via toast notifications */}
                 </CardContent>
               </Card>
             </div>

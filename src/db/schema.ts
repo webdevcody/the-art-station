@@ -110,7 +110,9 @@ export const order = pgTable("order", {
   customerAddress: text("customer_address").notNull(),
   totalAmount: integer("total_amount").notNull(), // in cents
   stripePaymentIntentId: text("stripe_payment_intent_id"),
-  status: text("status", { enum: ["new", "processed", "cancelled"] })
+  status: text("status", {
+    enum: ["new", "processed", "cancelled", "failed", "refunded"],
+  })
     .notNull()
     .default("new"),
   createdAt: timestamp("created_at").notNull(),

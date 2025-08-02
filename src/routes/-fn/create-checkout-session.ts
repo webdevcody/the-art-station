@@ -2,6 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import Stripe from "stripe";
 import { env } from "../../utils/env";
+import { database } from "~/db";
+import { artwork } from "~/db/schema";
+import { eq, inArray, and } from "drizzle-orm";
 
 const createCheckoutSessionSchema = z.object({
   items: z.array(
@@ -28,6 +31,32 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
 
       if (items.length === 0) {
         throw new Error("No items in cart");
+      }
+
+      // Check availability of all artworks before creating checkout session
+      const artworkIds = items.map((item) => item.artworkId);
+      const availableArtworks = await database
+        .select()
+        .from(artwork)
+        .where(
+          and(
+            inArray(artwork.id, artworkIds),
+            eq(artwork.isForSale, true),
+            eq(artwork.isSold, false)
+          )
+        );
+
+      // Check if all requested artworks are still available
+      const availableArtworkIds = availableArtworks.map((art) => art.id);
+      const unavailableArtworks = items.filter(
+        (item) => !availableArtworkIds.includes(item.artworkId)
+      );
+
+      if (unavailableArtworks.length > 0) {
+        const unavailableTitles = unavailableArtworks.map((item) => item.title);
+        throw new Error(
+          `Some items are no longer available: ${unavailableTitles.join(", ")}`
+        );
       }
 
       // Initialize Stripe with proper error handling
@@ -76,6 +105,13 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       return { sessionId: session.id, url: session.url };
     } catch (error) {
       console.error("Error creating checkout session:", error);
+
+      // Re-throw the original error if it's already an Error instance
+      if (error instanceof Error) {
+        throw error;
+      }
+
+      // Otherwise, throw a generic error
       throw new Error("Failed to create checkout session");
     }
   });

@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { order, orderItem, artwork } from "../../../db/schema";
 import { env } from "../../../utils/env";
 import { database } from "~/db";
-import { inArray, sql } from "drizzle-orm";
+import { eq, inArray, sql, and } from "drizzle-orm";
 import { createServerFileRoute } from "@tanstack/react-start/server";
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -57,6 +57,83 @@ export const ServerRoute = createServerFileRoute(
             quantity: number;
           }>;
 
+          // Check availability of all artworks before processing
+          const artworkIds = items.map((item) => item.artworkId);
+          const availableArtworks = await database
+            .select()
+            .from(artwork)
+            .where(
+              and(
+                inArray(artwork.id, artworkIds),
+                eq(artwork.isForSale, true),
+                eq(artwork.isSold, false)
+              )
+            );
+
+          // Check if all requested artworks are still available
+          const availableArtworkIds = availableArtworks.map((art) => art.id);
+          const unavailableArtworks = items.filter(
+            (item) => !availableArtworkIds.includes(item.artworkId)
+          );
+
+          if (unavailableArtworks.length > 0) {
+            console.warn(
+              `Some artworks are no longer available for session ${session.id}:`,
+              unavailableArtworks.map((item) => item.artworkId)
+            );
+
+            // Immediately refund the customer
+            await stripe.refunds.create({
+              payment_intent: session.payment_intent as string,
+              reason: "requested_by_customer",
+            });
+
+            // Send email to customer explaining the situation
+            // await sendUnavailableEmail(session.customer_details?.email); // This function is not defined in the original file
+
+            // Create order with failed status for unavailable items
+            const [newOrder] = await database
+              .insert(order)
+              .values({
+                id: session.id,
+                customerName: session.customer_details?.name || "Unknown",
+                customerEmail:
+                  session.customer_details?.email || "unknown@example.com",
+                customerAddress:
+                  JSON.stringify(session.customer_details?.address) ||
+                  "No address provided",
+                totalAmount: Math.round(
+                  items.reduce(
+                    (sum, item) => sum + item.price * item.quantity,
+                    0
+                  ) * 100
+                ),
+                stripePaymentIntentId: session.payment_intent as string,
+                status: "refunded",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              })
+              .returning();
+
+            // Log the issue for manual refund processing
+            console.error(
+              `Order ${session.id} failed: Some artworks are no longer available. ` +
+                `Customer: ${session.customer_details?.email}. ` +
+                `Payment Intent: ${session.payment_intent}. ` +
+                `Manual refund required.`
+            );
+
+            return new Response(
+              JSON.stringify({
+                received: true,
+                error: "Some artworks are no longer available",
+                unavailableArtworks: unavailableArtworks.map(
+                  (item) => item.artworkId
+                ),
+              })
+            );
+          }
+
           // Calculate total amount
           const totalAmount = items.reduce(
             (sum, item) => sum + item.price * item.quantity,
@@ -92,18 +169,41 @@ export const ServerRoute = createServerFileRoute(
             createdAt: new Date(),
           }));
 
-          await database.insert(orderItem).values(orderItemsData);
+          try {
+            await database.insert(orderItem).values(orderItemsData);
+          } catch (error) {
+            console.error("Error inserting order items:", error);
+            await database
+              .update(order)
+              .set({ status: "failed", updatedAt: new Date() })
+              .where(eq(order.id, newOrder.id));
+            return new Response(JSON.stringify({ received: true }));
+          }
 
           // Mark all artwork items as sold by setting isForSale to false
-          const artworkIds = items.map((item) => item.artworkId);
-          await database
+          // Use a more specific condition to avoid race conditions
+          const updateResult = await database
             .update(artwork)
             .set({
               isForSale: false,
               isSold: true,
               updatedAt: new Date(),
             })
-            .where(inArray(artwork.id, artworkIds));
+            .where(
+              and(
+                inArray(artwork.id, artworkIds),
+                eq(artwork.isForSale, true),
+                eq(artwork.isSold, false)
+              )
+            );
+
+          // Check if all artworks were successfully updated
+          if (updateResult.rowCount !== artworkIds.length) {
+            console.warn(
+              `Not all artworks were updated for session ${session.id}. ` +
+                `Expected: ${artworkIds.length}, Updated: ${updateResult.rowCount}`
+            );
+          }
 
           console.log(`Order created successfully: ${newOrder.id}`);
           return new Response(JSON.stringify({ received: true }));

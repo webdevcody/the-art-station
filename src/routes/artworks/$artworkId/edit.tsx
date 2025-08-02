@@ -1,4 +1,10 @@
-import { createFileRoute, Link, redirect, useSearch } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useSearch,
+  useNavigate,
+} from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -48,6 +54,7 @@ interface EditArtworkFormProps {
 
 function EditArtworkForm({ artwork, fromAdmin }: EditArtworkFormProps) {
   const updateArtworkMutation = useUpdateArtwork();
+  const navigate = useNavigate();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -105,6 +112,16 @@ function EditArtworkForm({ artwork, fromAdmin }: EditArtworkFormProps) {
       });
 
       toast.success("Artwork updated successfully!");
+
+      // Redirect back to where the user came from
+      if (fromAdmin) {
+        navigate({ to: "/admin" });
+      } else {
+        navigate({
+          to: "/artworks/$artworkId",
+          params: { artworkId: artwork.id },
+        });
+      }
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to update artwork"
@@ -234,8 +251,8 @@ function EditArtworkForm({ artwork, fromAdmin }: EditArtworkFormProps) {
               )}
               Update Artwork
             </Button>
-            <Link 
-              to={fromAdmin ? "/admin" : "/artworks/$artworkId"} 
+            <Link
+              to={fromAdmin ? "/admin" : "/artworks/$artworkId"}
               params={fromAdmin ? {} : { artworkId: artwork.id }}
             >
               <Button variant="outline" type="button">
@@ -339,8 +356,8 @@ function EditArtwork() {
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="mb-6">
-          <Link 
-            to={search.from === "admin" ? "/admin" : "/artworks/$artworkId"} 
+          <Link
+            to={search.from === "admin" ? "/admin" : "/artworks/$artworkId"}
             params={search.from === "admin" ? {} : { artworkId }}
           >
             <Button variant="outline" size="sm">
@@ -383,7 +400,10 @@ function EditArtwork() {
           </div>
 
           <div>
-            <EditArtworkForm artwork={artwork} fromAdmin={search.from === "admin"} />
+            <EditArtworkForm
+              artwork={artwork}
+              fromAdmin={search.from === "admin"}
+            />
           </div>
         </div>
       </main>

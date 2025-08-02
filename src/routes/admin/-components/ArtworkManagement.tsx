@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import {
   MoreHorizontal,
   Plus,
@@ -39,12 +41,17 @@ export function ArtworkManagement() {
   const { data: artworks = [], isLoading } = useGetArtworks();
   const deleteArtwork = useDeleteArtwork();
   const [searchTerm, setSearchTerm] = useState("");
+  const [showSoldOnly, setShowSoldOnly] = useState(false);
 
-  const filteredArtworks = artworks.filter(
-    (artwork) =>
+  const filteredArtworks = artworks.filter((artwork) => {
+    const matchesSearch =
       artwork.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      artwork.user?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      artwork.user?.name?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesSoldFilter = showSoldOnly ? artwork.isSold : !artwork.isSold;
+
+    return matchesSearch && matchesSoldFilter;
+  });
 
   const handleDelete = async (artworkId: string, title: string) => {
     try {
@@ -85,6 +92,14 @@ export function ArtworkManagement() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="sold-filter"
+            checked={showSoldOnly}
+            onCheckedChange={setShowSoldOnly}
+          />
+          <Label htmlFor="sold-filter">Show sold only</Label>
+        </div>
         <Button variant="outline" className="flex items-center gap-2">
           <Filter className="h-4 w-4" />
           Filter
@@ -100,8 +115,12 @@ export function ArtworkManagement() {
           <div className="col-span-full text-center py-8">
             <p className="text-muted-foreground">
               {searchTerm
-                ? "No artworks match your search."
-                : "No artworks found. Add your first artwork!"}
+                ? showSoldOnly
+                  ? "No sold artworks match your search."
+                  : "No unsold artworks match your search."
+                : showSoldOnly
+                  ? "No sold artworks found."
+                  : "No unsold artworks found. Add your first artwork!"}
             </p>
           </div>
         ) : (
@@ -187,12 +206,19 @@ export function ArtworkManagement() {
               </CardHeader>
               <CardContent className="pt-0">
                 <div className="flex justify-between items-center mb-3">
-                  <Badge
-                    variant={artwork.isForSale ? "default" : "secondary"}
-                    className={artwork.isForSale ? "" : "text-muted-foreground"}
-                  >
-                    {artwork.isForSale ? "For Sale" : "Not for Sale"}
-                  </Badge>
+                  <div className="flex gap-2">
+                    <Badge
+                      variant={artwork.isForSale ? "default" : "secondary"}
+                      className={
+                        artwork.isForSale ? "" : "text-muted-foreground"
+                      }
+                    >
+                      {artwork.isForSale ? "For Sale" : "Not for Sale"}
+                    </Badge>
+                    {artwork.isSold && (
+                      <Badge variant="destructive">Sold</Badge>
+                    )}
+                  </div>
                   <span className="font-semibold text-lg">
                     ${artwork.price.toFixed(2)}
                   </span>
