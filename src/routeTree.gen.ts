@@ -16,6 +16,7 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CheckoutSuccessRouteImport } from './routes/checkout/success'
 import { Route as ArtworksArtworkIdIndexRouteImport } from './routes/artworks/$artworkId/index'
 import { Route as ArtworksArtworkIdEditRouteImport } from './routes/artworks/$artworkId/edit'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
@@ -47,6 +48,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
+  id: '/checkout/success',
+  path: '/checkout/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ArtworksArtworkIdIndexRoute = ArtworksArtworkIdIndexRouteImport.update({
   id: '/artworks/$artworkId/',
   path: '/artworks/$artworkId/',
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/browse': typeof BrowseRoute
   '/cart': typeof CartRoute
   '/unauthorized': typeof UnauthorizedRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/artworks/$artworkId/edit': typeof ArtworksArtworkIdEditRoute
   '/artworks/$artworkId': typeof ArtworksArtworkIdIndexRoute
 }
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/browse': typeof BrowseRoute
   '/cart': typeof CartRoute
   '/unauthorized': typeof UnauthorizedRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/artworks/$artworkId/edit': typeof ArtworksArtworkIdEditRoute
   '/artworks/$artworkId': typeof ArtworksArtworkIdIndexRoute
 }
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/browse': typeof BrowseRoute
   '/cart': typeof CartRoute
   '/unauthorized': typeof UnauthorizedRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/artworks/$artworkId/edit': typeof ArtworksArtworkIdEditRoute
   '/artworks/$artworkId/': typeof ArtworksArtworkIdIndexRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/browse'
     | '/cart'
     | '/unauthorized'
+    | '/checkout/success'
     | '/artworks/$artworkId/edit'
     | '/artworks/$artworkId'
   fileRoutesByTo: FileRoutesByTo
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/browse'
     | '/cart'
     | '/unauthorized'
+    | '/checkout/success'
     | '/artworks/$artworkId/edit'
     | '/artworks/$artworkId'
   id:
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/browse'
     | '/cart'
     | '/unauthorized'
+    | '/checkout/success'
     | '/artworks/$artworkId/edit'
     | '/artworks/$artworkId/'
   fileRoutesById: FileRoutesById
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   BrowseRoute: typeof BrowseRoute
   CartRoute: typeof CartRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
+  CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   ArtworksArtworkIdEditRoute: typeof ArtworksArtworkIdEditRoute
   ArtworksArtworkIdIndexRoute: typeof ArtworksArtworkIdIndexRoute
 }
@@ -189,6 +202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/success': {
+      id: '/checkout/success'
+      path: '/checkout/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof CheckoutSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/artworks/$artworkId/': {
       id: '/artworks/$artworkId/'
       path: '/artworks/$artworkId'
@@ -223,6 +243,7 @@ const rootRouteChildren: RootRouteChildren = {
   BrowseRoute: BrowseRoute,
   CartRoute: CartRoute,
   UnauthorizedRoute: UnauthorizedRoute,
+  CheckoutSuccessRoute: CheckoutSuccessRoute,
   ArtworksArtworkIdEditRoute: ArtworksArtworkIdEditRoute,
   ArtworksArtworkIdIndexRoute: ArtworksArtworkIdIndexRoute,
 }

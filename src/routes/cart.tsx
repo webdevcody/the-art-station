@@ -4,14 +4,16 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCart } from "@/contexts/CartContext";
-import { Trash2, Plus, Minus, ShoppingCart } from "lucide-react";
+import { useCreateCheckoutSession } from "./-hooks/use-create-checkout-session";
+import { Trash2, Plus, Minus, ShoppingCart, CreditCard } from "lucide-react";
 
 export const Route = createFileRoute("/cart")({
   component: Cart,
 });
 
 function Cart() {
-  const { cart, removeFromCart, clearCart } = useCart();
+  const { cart, removeFromCart, updateItemQuantity, clearCart } = useCart();
+  const createCheckoutSession = useCreateCheckoutSession();
 
   if (cart.items.length === 0) {
     return (
@@ -77,7 +79,10 @@ function Cart() {
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-lg">{item.title}</h3>
                         <p className="text-2xl font-bold text-primary">
-                          ${item.price.toFixed(2)}
+                          ${(item.price * item.quantity).toFixed(2)}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          ${item.price.toFixed(2)} each
                         </p>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -94,10 +99,18 @@ function Cart() {
                     <div className="mt-4 pt-4 border-t">
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">
-                          Price:
+                          Price per item:
                         </span>
                         <span className="font-semibold">
                           ${item.price.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center mt-1">
+                        <span className="text-sm text-muted-foreground">
+                          Total:
+                        </span>
+                        <span className="font-semibold">
+                          ${(item.price * item.quantity).toFixed(2)}
                         </span>
                       </div>
                     </div>
@@ -121,9 +134,12 @@ function Cart() {
                       >
                         <div className="flex-1">
                           <p className="font-medium">{item.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Qty: {item.quantity}
+                          </p>
                         </div>
                         <span className="font-semibold">
-                          ${item.price.toFixed(2)}
+                          ${(item.price * item.quantity).toFixed(2)}
                         </span>
                       </div>
                     ))}
@@ -134,12 +150,29 @@ function Cart() {
                       <span>${cart.total.toFixed(2)}</span>
                     </div>
                   </div>
-                  <Button className="w-full" size="lg">
-                    Proceed to Checkout
+                  <Button
+                    className="w-full"
+                    size="lg"
+                    onClick={() => createCheckoutSession.mutate(cart.items)}
+                    disabled={createCheckoutSession.isPending}
+                  >
+                    {createCheckoutSession.isPending ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        Proceed to Checkout
+                      </>
+                    )}
                   </Button>
-                  <p className="text-xs text-muted-foreground text-center">
-                    Checkout functionality coming soon!
-                  </p>
+                  {createCheckoutSession.isError && (
+                    <p className="text-xs text-destructive text-center">
+                      Failed to create checkout session. Please try again.
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             </div>
