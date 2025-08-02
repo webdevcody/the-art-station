@@ -15,6 +15,7 @@ import appCss from "~/styles/app.css?url";
 import { seo } from "~/utils/seo";
 import { authClient } from "~/lib/auth-client";
 import { ThemeProvider } from "~/components/ThemeProvider";
+import { CartProvider } from "~/contexts/CartContext";
 import { Toaster } from "sonner";
 
 export const Route = createRootRouteWithContext<{
@@ -133,11 +134,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="min-h-screen">
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-          <Toaster />
-          {children}
-          <TanStackRouterDevtools position="bottom-right" />
-          <ReactQueryDevtools buttonPosition="bottom-left" />
-          <Scripts />
+          <CartProvider>
+            <Toaster />
+            {children}
+            <TanStackRouterDevtools position="bottom-right" />
+            <ReactQueryDevtools buttonPosition="bottom-left" />
+            <Scripts />
+          </CartProvider>
         </ThemeProvider>
       </body>
     </html>

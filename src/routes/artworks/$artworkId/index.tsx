@@ -3,9 +3,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
-import { ArrowLeft, Edit } from "lucide-react";
+import { ArrowLeft, Edit, ShoppingCart } from "lucide-react";
 import { authClient } from "~/lib/auth-client";
 import { useGetArtworkById } from "~/routes/-hooks/use-get-artwork-by-id";
+import { useCart } from "@/contexts/CartContext";
 
 export const Route = createFileRoute("/artworks/$artworkId/")({
   component: ArtworkDetail,
@@ -15,6 +16,7 @@ function ArtworkDetail() {
   const { artworkId } = Route.useParams();
   const { data: artwork, isLoading, error } = useGetArtworkById(artworkId);
   const { data: sessionData } = authClient.useSession();
+  const { addToCart, getItemQuantity } = useCart();
 
   // Check if user is admin
   const isAdmin = sessionData?.user && (sessionData.user as any).isAdmin;
@@ -144,7 +146,11 @@ function ArtworkDetail() {
 
             {isAdmin ? (
               <div className="pt-4">
-                <Link to="/artworks/$artworkId/edit" params={{ artworkId }}>
+                <Link
+                  to="/artworks/$artworkId/edit"
+                  params={{ artworkId }}
+                  search={{ from: "detail" }}
+                >
                   <Button size="lg" className="w-full">
                     <Edit className="w-4 h-4 mr-2" />
                     Edit Artwork
@@ -154,11 +160,23 @@ function ArtworkDetail() {
             ) : artwork.isForSale ? (
               <div className="pt-4 space-y-3">
                 <Button
-                  onClick={handleBuy}
+                  onClick={() => addToCart(artwork)}
                   size="lg"
                   className="w-full"
                   variant="outline"
+                  disabled={getItemQuantity(artwork.id) > 0}
                 >
+                  <ShoppingCart className="w-4 h-4 mr-2" />
+                  {getItemQuantity(artwork.id) > 0
+                    ? "Added to Cart"
+                    : "Add to Cart"}
+                  {getItemQuantity(artwork.id) > 0 && (
+                    <span className="ml-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs">
+                      ✓
+                    </span>
+                  )}
+                </Button>
+                <Button onClick={handleBuy} size="lg" className="w-full">
                   Buy Now
                 </Button>
               </div>

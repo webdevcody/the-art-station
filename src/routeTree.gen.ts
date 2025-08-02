@@ -12,6 +12,7 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
+import { Route as CartRouteImport } from './routes/cart'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -24,6 +25,11 @@ const rootServerRouteImport = createServerRootRoute()
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
   path: '/unauthorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BrowseRoute = BrowseRouteImport.update({
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRoute
   '/browse': typeof BrowseRoute
+  '/cart': typeof CartRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/artworks/$artworkId/edit': typeof ArtworksArtworkIdEditRoute
   '/artworks/$artworkId': typeof ArtworksArtworkIdIndexRoute
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRoute
   '/browse': typeof BrowseRoute
+  '/cart': typeof CartRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/artworks/$artworkId/edit': typeof ArtworksArtworkIdEditRoute
   '/artworks/$artworkId': typeof ArtworksArtworkIdIndexRoute
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRoute
   '/browse': typeof BrowseRoute
+  '/cart': typeof CartRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/artworks/$artworkId/edit': typeof ArtworksArtworkIdEditRoute
   '/artworks/$artworkId/': typeof ArtworksArtworkIdIndexRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/cart'
     | '/unauthorized'
     | '/artworks/$artworkId/edit'
     | '/artworks/$artworkId'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/cart'
     | '/unauthorized'
     | '/artworks/$artworkId/edit'
     | '/artworks/$artworkId'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/cart'
     | '/unauthorized'
     | '/artworks/$artworkId/edit'
     | '/artworks/$artworkId/'
@@ -113,6 +125,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRoute
   BrowseRoute: typeof BrowseRoute
+  CartRoute: typeof CartRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
   ArtworksArtworkIdEditRoute: typeof ArtworksArtworkIdEditRoute
   ArtworksArtworkIdIndexRoute: typeof ArtworksArtworkIdIndexRoute
@@ -146,6 +159,13 @@ declare module '@tanstack/react-router' {
       path: '/unauthorized'
       fullPath: '/unauthorized'
       preLoaderRoute: typeof UnauthorizedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/browse': {
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRoute,
   BrowseRoute: BrowseRoute,
+  CartRoute: CartRoute,
   UnauthorizedRoute: UnauthorizedRoute,
   ArtworksArtworkIdEditRoute: ArtworksArtworkIdEditRoute,
   ArtworksArtworkIdIndexRoute: ArtworksArtworkIdIndexRoute,

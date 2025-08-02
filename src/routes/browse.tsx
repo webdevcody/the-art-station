@@ -10,6 +10,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useGetArtworks } from "./-hooks/use-get-artworks";
+import { useCart } from "@/contexts/CartContext";
+import { authClient } from "@/lib/auth-client";
+import { ShoppingCart } from "lucide-react";
 
 export const Route = createFileRoute("/browse")({
   component: Browse,
@@ -17,6 +20,9 @@ export const Route = createFileRoute("/browse")({
 
 function Browse() {
   const { data: artworks, isLoading, error } = useGetArtworks();
+  const { addToCart, getItemQuantity } = useCart();
+  const { data: sessionData } = authClient.useSession();
+  const isAdmin = sessionData?.user && (sessionData.user as any).isAdmin;
 
   if (isLoading) {
     return (
@@ -102,14 +108,32 @@ function Browse() {
                     </p>
                   </CardContent>
                   <CardFooter className="p-4 pt-0 space-y-2">
-                    <Link
-                      to="/artworks/$artworkId"
-                      params={{ artworkId: artwork.id }}
-                    >
-                      <Button className="w-full" variant="outline">
-                        View Details
-                      </Button>
-                    </Link>
+                    <div className="flex space-x-2">
+                      <Link
+                        to="/artworks/$artworkId"
+                        params={{ artworkId: artwork.id }}
+                        className="flex-1"
+                      >
+                        <Button className="w-full" variant="outline">
+                          View Details
+                        </Button>
+                      </Link>
+                      {!isAdmin && (
+                        <Button
+                          onClick={() => addToCart(artwork)}
+                          className="flex items-center space-x-2"
+                          size="sm"
+                          disabled={getItemQuantity(artwork.id) > 0}
+                        >
+                          <ShoppingCart className="h-4 w-4" />
+                          {getItemQuantity(artwork.id) > 0 ? (
+                            <span className="text-xs bg-green-500 text-white px-1.5 py-0.5 rounded-full">
+                              ✓
+                            </span>
+                          ) : null}
+                        </Button>
+                      )}
+                    </div>
                   </CardFooter>
                 </Card>
               ))}
