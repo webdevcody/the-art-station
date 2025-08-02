@@ -2,8 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { AddToCartButton } from "@/components/AddToCartButton";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import { ArrowLeft, Edit } from "lucide-react";
 import { useGetArtworkById } from "../-hooks/use-get-artwork-by-id";
 import { authClient } from "~/lib/auth-client";
@@ -154,11 +153,6 @@ function ArtworkDetail() {
               </div>
             ) : artwork.isForSale ? (
               <div className="pt-4 space-y-3">
-                <AddToCartButton
-                  artwork={artwork}
-                  size="lg"
-                  className="w-full"
-                />
                 <Button
                   onClick={handleBuy}
                   size="lg"

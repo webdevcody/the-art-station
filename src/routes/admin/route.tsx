@@ -4,17 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { ArtworkManagement } from "./-components/ArtworkManagement";
 import { OrdersManagement } from "./-components/OrdersManagement";
-import { auth } from "~/utils/auth";
-import { getWebRequest } from "@tanstack/react-start/server";
-import { createServerFn } from "@tanstack/react-start";
-
-export const isAdminFn = createServerFn().handler(async () => {
-  const request = getWebRequest();
-  const session = await auth.api.getSession({
-    headers: request.headers,
-  });
-  return session?.user?.isAdmin;
-});
+import { isAdminFn } from "../-hooks/use-is-admin";
 
 export const Route = createFileRoute("/admin")({
   component: AdminDashboard,

@@ -16,8 +16,6 @@ import { seo } from "~/utils/seo";
 import { authClient } from "~/lib/auth-client";
 import { ThemeProvider } from "~/components/ThemeProvider";
 import { Toaster } from "sonner";
-import { SessionProvider } from "~/lib/sessionContext";
-import { CartProvider } from "~/contexts/CartContext";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -135,15 +133,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="min-h-screen">
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-          <SessionProvider>
-            <CartProvider>
-              <Toaster />
-              {children}
-              <TanStackRouterDevtools position="bottom-right" />
-              <ReactQueryDevtools buttonPosition="bottom-left" />
-              <Scripts />
-            </CartProvider>
-          </SessionProvider>
+          <Toaster />
+          {children}
+          <TanStackRouterDevtools position="bottom-right" />
+          <ReactQueryDevtools buttonPosition="bottom-left" />
+          <Scripts />
         </ThemeProvider>
       </body>
     </html>

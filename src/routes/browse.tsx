@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { AddToCartButton } from "@/components/AddToCartButton";
 import {
   Card,
   CardContent,
@@ -111,7 +110,6 @@ function Browse() {
                         View Details
                       </Button>
                     </Link>
-                    <AddToCartButton artwork={artwork} className="w-full" />
                   </CardFooter>
                 </Card>
               ))}

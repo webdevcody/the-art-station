@@ -1,26 +1,22 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { getWebRequest } from "@tanstack/react-start/server";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { useGetArtworkById } from "../../-hooks/use-get-artwork-by-id";
 import { EditArtworkForm } from "../../admin/-components/EditArtworkForm";
 import { authClient } from "~/lib/auth-client";
-import { auth } from "~/utils/auth";
+import { isAdminFn } from "~/routes/-hooks/use-is-admin";
 
 export const Route = createFileRoute("/artworks/$artworkId/edit")({
   component: EditArtwork,
   beforeLoad: async () => {
-    const request = getWebRequest();
-    if (!request?.headers) {
-      throw redirect({ to: "/" });
-    }
-
-    const session = await auth.api.getSession({ headers: request.headers });
-    if (!session || session.user.email !== "webdevcody@gmail.com") {
-      throw redirect({ to: "/unauthorized" });
+    const isAdmin = await isAdminFn();
+    if (!isAdmin) {
+      throw redirect({
+        to: "/unauthorized",
+      });
     }
   },
 });
