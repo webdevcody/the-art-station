@@ -54,7 +54,7 @@ export function Header() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
-                {sessionData.user.isAdmin && (
+                {(sessionData.user as any).isAdmin && (
                   <DropdownMenuItem asChild className="cursor-pointer">
                     <Link to="/admin">
                       <Settings className="mr-2 h-4 w-4" />

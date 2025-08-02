@@ -13,16 +13,23 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { auth } from "~/utils/auth";
+import { getHeaders } from "@tanstack/react-start/server";
 import { getWebRequest } from "@tanstack/react-start/server";
+import { createServerFn } from "@tanstack/react-start";
+
+export const isAdminFn = createServerFn().handler(async () => {
+  const request = getWebRequest();
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
+  return session?.user?.isAdmin;
+});
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
   beforeLoad: async () => {
-    const request = getWebRequest();
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
-    if (!session?.user?.isAdmin) {
+    const isAdmin = await isAdminFn();
+    if (!isAdmin) {
       throw redirect({
         to: "/unauthorized",
       });

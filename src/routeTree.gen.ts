@@ -11,6 +11,7 @@
 import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -24,6 +25,11 @@ import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/
 
 const rootServerRouteImport = createServerRootRoute()
 
+const UnauthorizedRoute = UnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BrowseRoute = BrowseRouteImport.update({
   id: '/browse',
   path: '/browse',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/browse': typeof BrowseRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/artworks': typeof AdminArtworksRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/artworks': typeof AdminArtworksRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/browse': typeof BrowseRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/artworks': typeof AdminArtworksRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/unauthorized'
     | '/admin/analytics'
     | '/admin/artworks'
     | '/admin/settings'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/browse'
+    | '/unauthorized'
     | '/admin/analytics'
     | '/admin/artworks'
     | '/admin/settings'
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/unauthorized'
     | '/admin/analytics'
     | '/admin/artworks'
     | '/admin/settings'
@@ -147,6 +159,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   BrowseRoute: typeof BrowseRoute
+  UnauthorizedRoute: typeof UnauthorizedRoute
   ArtworksArtworkIdRoute: typeof ArtworksArtworkIdRoute
 }
 export interface FileServerRoutesByFullPath {
@@ -173,6 +186,13 @@ export interface RootServerRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/browse': {
       id: '/browse'
       path: '/browse'
@@ -274,6 +294,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   BrowseRoute: BrowseRoute,
+  UnauthorizedRoute: UnauthorizedRoute,
   ArtworksArtworkIdRoute: ArtworksArtworkIdRoute,
 }
 export const routeTree = rootRouteImport

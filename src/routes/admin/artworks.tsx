@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { MoreHorizontal, Plus, Search, Filter, Eye } from "lucide-react";
+import { AddArtworkForm } from "@/routes/-components/AddArtworkForm";
 
 export const Route = createFileRoute("/admin/artworks")({
   component: ArtworksManagement,
@@ -55,10 +56,12 @@ function ArtworksManagement() {
             Manage artwork submissions, reviews, and featured pieces across the gallery.
           </p>
         </div>
-        <Button className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Add Artwork
-        </Button>
+        <AddArtworkForm>
+          <Button className="flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            Add Artwork
+          </Button>
+        </AddArtworkForm>
       </div>
 
       <div className="flex items-center space-x-4">

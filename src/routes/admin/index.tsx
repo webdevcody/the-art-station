@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3, Users, Image, TrendingUp } from "lucide-react";
 
@@ -107,6 +107,12 @@ function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
+              <Link to="/browse">
+                <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
+                  <p className="font-medium">Browse Artwork</p>
+                  <p className="text-xs text-muted-foreground">View artwork as a visitor</p>
+                </button>
+              </Link>
               <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
                 <p className="font-medium">Review Pending Artworks</p>
                 <p className="text-xs text-muted-foreground">3 items awaiting approval</p>
