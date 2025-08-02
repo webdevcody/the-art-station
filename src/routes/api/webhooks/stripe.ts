@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { order, orderItem, artwork } from "../../../db/schema";
 import { env } from "../../../utils/env";
 import { database } from "~/db";
-import { sql } from "drizzle-orm";
+import { inArray, sql } from "drizzle-orm";
 import { createServerFileRoute } from "@tanstack/react-start/server";
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -103,7 +103,7 @@ export const ServerRoute = createServerFileRoute(
               isSold: true,
               updatedAt: new Date(),
             })
-            .where(sql`${artwork.id} = ANY(${artworkIds})`);
+            .where(inArray(artwork.id, artworkIds));
 
           console.log(`Order created successfully: ${newOrder.id}`);
           return new Response(JSON.stringify({ received: true }));

@@ -58,6 +58,9 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         mode: "payment",
         success_url: `${env.BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${env.BASE_URL}/cart`,
+        shipping_address_collection: {
+          allowed_countries: ["US"],
+        },
         metadata: {
           items: JSON.stringify(
             items.map((item) => ({

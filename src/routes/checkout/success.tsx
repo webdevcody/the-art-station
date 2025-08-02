@@ -16,6 +16,11 @@ function CheckoutSuccess() {
     session_id: string;
   };
   const sessionId = searchParams.session_id as string;
+  const { clearCart } = useCart();
+
+  useEffect(() => {
+    clearCart();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">

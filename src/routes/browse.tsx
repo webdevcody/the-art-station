@@ -68,10 +68,11 @@ function Browse() {
         </div>
 
         {artworks &&
-        artworks.filter((artwork) => artwork.isForSale).length > 0 ? (
+        artworks.filter((artwork) => artwork.isForSale && !artwork.isSold)
+          .length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {artworks
-              .filter((artwork) => artwork.isForSale)
+              .filter((artwork) => artwork.isForSale && !artwork.isSold)
               .map((artwork) => (
                 <Card
                   key={artwork.id}

@@ -6,6 +6,7 @@ export interface Artwork {
   imageData: string | null;
   imageMimeType: string | null;
   isForSale: boolean;
+  isSold: boolean;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
