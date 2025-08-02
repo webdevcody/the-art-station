@@ -4,10 +4,10 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
 import { ArrowLeft, Edit } from "lucide-react";
-import { useGetArtworkById } from "../-hooks/use-get-artwork-by-id";
 import { authClient } from "~/lib/auth-client";
+import { useGetArtworkById } from "~/routes/-hooks/use-get-artwork-by-id";
 
-export const Route = createFileRoute("/artworks/$artworkId")({
+export const Route = createFileRoute("/artworks/$artworkId/")({
   component: ArtworkDetail,
 });
 

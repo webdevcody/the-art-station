@@ -13,8 +13,8 @@ import {
   Trash2,
 } from "lucide-react";
 import { AddArtworkForm } from "~/routes/admin/-components/AddArtworkForm";
-import { EditArtworkForm } from "./EditArtworkForm";
 import { useGetArtworks } from "@/routes/-hooks/use-get-artworks";
+import { Link } from "@tanstack/react-router";
 import { useDeleteArtwork } from "@/routes/-hooks/use-delete-artwork";
 import {
   DropdownMenu,
@@ -137,7 +137,11 @@ export function ArtworkManagement() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <EditArtworkForm artwork={artwork}>
+                      <Link
+                        to="/artworks/$artworkId/edit"
+                        params={{ artworkId: artwork.id }}
+                        search={{ from: "admin" }}
+                      >
                         <DropdownMenuItem
                           onSelect={(e) => e.preventDefault()}
                           className="cursor-pointer"
@@ -145,7 +149,7 @@ export function ArtworkManagement() {
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
-                      </EditArtworkForm>
+                      </Link>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <DropdownMenuItem
