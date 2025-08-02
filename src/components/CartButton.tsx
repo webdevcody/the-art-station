@@ -4,6 +4,7 @@ import { ShoppingCart, Trash2, Plus, Minus, AlertTriangle } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useCheckCartAvailability } from "@/routes/-hooks/use-check-cart-availability";
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,9 +17,10 @@ export function CartButton() {
   const { cart, removeFromCart, getCartItemCount } = useCart();
   const itemCount = getCartItemCount();
   const { data: availabilityData } = useCheckCartAvailability(cart.items);
+  const [open, setOpen] = useState(false);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <ShoppingCart className="h-5 w-5" />
@@ -105,7 +107,7 @@ export function CartButton() {
                 <span className="font-semibold">Total:</span>
                 <span className="font-semibold">${cart.total.toFixed(2)}</span>
               </div>
-              <Link to="/cart" className="w-full">
+              <Link to="/cart" className="w-full" onClick={() => setOpen(false)}>
                 <Button className="w-full" size="sm">
                   View Cart
                 </Button>
