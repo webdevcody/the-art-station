@@ -43,6 +43,13 @@
       "when": 1754100717374,
       "tag": "0005_familiar_whirlwind",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1754108943344,
+      "tag": "0006_smiling_lord_tyger",
+      "breakpoints": true
     }
   ]
 }

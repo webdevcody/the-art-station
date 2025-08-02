@@ -55,7 +55,7 @@ DATABASE_URL="postgresql://username:password@localhost:5432/art_station"
 
 # Stripe Configuration
 STRIPE_SECRET_KEY="sk_test_your_stripe_secret_key_here"
-STRIPE_PUBLISHABLE_KEY="pk_test_your_stripe_publishable_key_here"
+STRIPE_WEBHOOK_SECRET="whsec_your_stripe_webhook_secret_here"
 
 # Application
 BASE_URL="http://localhost:5173"
@@ -66,4 +66,5 @@ BASE_URL="http://localhost:5173"
 1. Create a Stripe account at [stripe.com](https://stripe.com)
 2. Get your API keys from the Stripe Dashboard
 3. Add the keys to your `.env` file
-4. For testing, use the test keys (they start with `sk_test_` and `pk_test_`)
+4. For testing, use the test keys (they start with `sk_test_`)
+5. Set up webhooks for order processing (see [STRIPE_WEBHOOK_SETUP.md](./STRIPE_WEBHOOK_SETUP.md))

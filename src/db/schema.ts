@@ -1,4 +1,10 @@
-import { boolean, text, timestamp, pgTable, integer } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  text,
+  timestamp,
+  pgTable,
+  integer,
+} from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 export const user = pgTable("user", {
@@ -80,6 +86,7 @@ export const artwork = pgTable("artwork", {
   imageData: text("image_data"),
   imageMimeType: text("image_mime_type"),
   isForSale: boolean("is_for_sale").notNull().default(true),
+  isSold: boolean("is_sold").notNull().default(false),
   userId: text("user_id")
     .notNull()
     .references(() => user.id),
@@ -102,7 +109,9 @@ export const order = pgTable("order", {
   customerAddress: text("customer_address").notNull(),
   totalAmount: integer("total_amount").notNull(), // in cents
   stripePaymentIntentId: text("stripe_payment_intent_id"),
-  status: text("status", { enum: ["new", "processed", "cancelled"] }).notNull().default("new"),
+  status: text("status", { enum: ["new", "processed", "cancelled"] })
+    .notNull()
+    .default("new"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });

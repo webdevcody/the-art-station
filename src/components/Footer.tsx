@@ -1,4 +1,15 @@
+import { authClient } from "@/lib/auth-client";
+
 export function Footer() {
+  const { data: sessionData } = authClient.useSession();
+
+  const handleSignIn = () => {
+    authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+    });
+  };
+
   return (
     <footer className="border-t bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -55,6 +66,16 @@ export function Footer() {
                   Shipping
                 </a>
               </li>
+              {!sessionData && (
+                <li>
+                  <button
+                    onClick={handleSignIn}
+                    className="hover:text-foreground transition-colors text-left"
+                  >
+                    Sign In
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 

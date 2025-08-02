@@ -85,10 +85,6 @@ function ArtworkDetail() {
     );
   }
 
-  const handleBuy = () => {
-    console.log(`Buy clicked for ${artwork.title}`);
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -175,9 +171,6 @@ function ArtworkDetail() {
                       ✓
                     </span>
                   )}
-                </Button>
-                <Button onClick={handleBuy} size="lg" className="w-full">
-                  Buy Now
                 </Button>
               </div>
             ) : (

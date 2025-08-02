@@ -1,11 +1,14 @@
-import { Route } from "@tanstack/react-start";
 import { database } from "@/db";
 import { artwork } from "@/db/schema";
+import { createServerFileRoute } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 
-export const RouteComponent = Route.createComponent({
-  component: async ({ params }) => {
-    const { artworkId } = params;
+export const ServerRoute = createServerFileRoute(
+  "/api/images/$artworkId"
+).methods({
+  GET: async ({ request }) => {
+    const url = new URL(request.url);
+    const artworkId = url.pathname.split("/").pop();
 
     try {
       // Fetch the artwork from the database
@@ -15,7 +18,7 @@ export const RouteComponent = Route.createComponent({
           imageMimeType: artwork.imageMimeType,
         })
         .from(artwork)
-        .where(eq(artwork.id, artworkId))
+        .where(eq(artwork.id, artworkId as string))
         .limit(1);
 
       if (artworkData.length === 0 || !artworkData[0].imageData) {

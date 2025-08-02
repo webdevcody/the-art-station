@@ -19,6 +19,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout/success'
 import { Route as ArtworksArtworkIdIndexRouteImport } from './routes/artworks/$artworkId/index'
 import { Route as ArtworksArtworkIdEditRouteImport } from './routes/artworks/$artworkId/edit'
+import { ServerRoute as ApiWebhooksStripeServerRouteImport } from './routes/api/webhooks/stripe'
+import { ServerRoute as ApiImagesArtworkIdServerRouteImport } from './routes/api/images/$artworkId'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -63,6 +65,17 @@ const ArtworksArtworkIdEditRoute = ArtworksArtworkIdEditRouteImport.update({
   path: '/artworks/$artworkId/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWebhooksStripeServerRoute = ApiWebhooksStripeServerRouteImport.update({
+  id: '/api/webhooks/stripe',
+  path: '/api/webhooks/stripe',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiImagesArtworkIdServerRoute =
+  ApiImagesArtworkIdServerRouteImport.update({
+    id: '/api/images/$artworkId',
+    path: '/api/images/$artworkId',
+    getParentRoute: () => rootServerRouteImport,
+  } as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -145,24 +158,36 @@ export interface RootRouteChildren {
 }
 export interface FileServerRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/images/$artworkId': typeof ApiImagesArtworkIdServerRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeServerRoute
 }
 export interface FileServerRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/images/$artworkId': typeof ApiImagesArtworkIdServerRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/images/$artworkId': typeof ApiImagesArtworkIdServerRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/auth/$'
+  fullPaths: '/api/auth/$' | '/api/images/$artworkId' | '/api/webhooks/stripe'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/auth/$'
-  id: '__root__' | '/api/auth/$'
+  to: '/api/auth/$' | '/api/images/$artworkId' | '/api/webhooks/stripe'
+  id:
+    | '__root__'
+    | '/api/auth/$'
+    | '/api/images/$artworkId'
+    | '/api/webhooks/stripe'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
+  ApiImagesArtworkIdServerRoute: typeof ApiImagesArtworkIdServerRoute
+  ApiWebhooksStripeServerRoute: typeof ApiWebhooksStripeServerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -227,6 +252,20 @@ declare module '@tanstack/react-router' {
 }
 declare module '@tanstack/react-start/server' {
   interface ServerFileRoutesByPath {
+    '/api/webhooks/stripe': {
+      id: '/api/webhooks/stripe'
+      path: '/api/webhooks/stripe'
+      fullPath: '/api/webhooks/stripe'
+      preLoaderRoute: typeof ApiWebhooksStripeServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/images/$artworkId': {
+      id: '/api/images/$artworkId'
+      path: '/api/images/$artworkId'
+      fullPath: '/api/images/$artworkId'
+      preLoaderRoute: typeof ApiImagesArtworkIdServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -252,6 +291,8 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
+  ApiImagesArtworkIdServerRoute: ApiImagesArtworkIdServerRoute,
+  ApiWebhooksStripeServerRoute: ApiWebhooksStripeServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport
   ._addFileChildren(rootServerRouteChildren)

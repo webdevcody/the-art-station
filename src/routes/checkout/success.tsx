@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,14 +12,10 @@ export const Route = createFileRoute("/checkout/success")({
 });
 
 function CheckoutSuccess() {
-  const { clearCart } = useCart();
-  const searchParams = new URLSearchParams(window.location.search);
-  const sessionId = searchParams.get("session_id");
-
-  useEffect(() => {
-    // Clear the cart after successful checkout
-    clearCart();
-  }, [clearCart]);
+  const searchParams = useSearch({ from: "/checkout/success" }) as {
+    session_id: string;
+  };
+  const sessionId = searchParams.session_id as string;
 
   return (
     <div className="min-h-screen flex flex-col">

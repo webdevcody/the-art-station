@@ -15,15 +15,6 @@ import { Link } from "@tanstack/react-router";
 export function Header() {
   const { data: sessionData } = authClient.useSession();
 
-  console.log(sessionData);
-
-  const handleSignIn = () => {
-    authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/",
-    });
-  };
-
   const handleSignOut = () => {
     authClient.signOut();
   };
@@ -43,7 +34,7 @@ export function Header() {
 
         <div className="flex items-center space-x-4">
           <CartButton />
-          {sessionData ? (
+          {sessionData && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -82,10 +73,6 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <Button onClick={handleSignIn} variant="outline">
-              Sign In
-            </Button>
           )}
           <ModeToggle />
         </div>
