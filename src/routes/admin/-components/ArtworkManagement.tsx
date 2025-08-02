@@ -12,7 +12,7 @@ import {
   Edit,
   Trash2,
 } from "lucide-react";
-import { AddArtworkForm } from "@/routes/-components/AddArtworkForm";
+import { AddArtworkForm } from "~/routes/admin/-components/AddArtworkForm";
 import { EditArtworkForm } from "./EditArtworkForm";
 import { useGetArtworks } from "@/routes/-hooks/use-get-artworks";
 import { useDeleteArtwork } from "@/routes/-hooks/use-delete-artwork";
@@ -107,7 +107,7 @@ export function ArtworkManagement() {
         ) : (
           filteredArtworks.map((artwork) => (
             <Card key={artwork.id} className="overflow-hidden">
-              <div className="aspect-square bg-muted relative">
+              <div className="aspect-[2/1] bg-muted relative">
                 {artwork.imageData ? (
                   <img
                     src={artwork.imageData}
@@ -183,7 +183,12 @@ export function ArtworkManagement() {
               </CardHeader>
               <CardContent className="pt-0">
                 <div className="flex justify-between items-center mb-3">
-                  <Badge variant="default">Published</Badge>
+                  <Badge
+                    variant={artwork.isForSale ? "default" : "secondary"}
+                    className={artwork.isForSale ? "" : "text-muted-foreground"}
+                  >
+                    {artwork.isForSale ? "For Sale" : "Not for Sale"}
+                  </Badge>
                   <span className="font-semibold text-lg">
                     ${artwork.price.toFixed(2)}
                   </span>

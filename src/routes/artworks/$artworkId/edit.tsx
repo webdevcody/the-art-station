@@ -1,24 +1,34 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { getWebRequest } from "@tanstack/react-start/server";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { AddToCartButton } from "@/components/AddToCartButton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ArrowLeft, Edit } from "lucide-react";
-import { useGetArtworkById } from "../-hooks/use-get-artwork-by-id";
+import { ArrowLeft } from "lucide-react";
+import { useGetArtworkById } from "../../-hooks/use-get-artwork-by-id";
+import { EditArtworkForm } from "../../admin/-components/EditArtworkForm";
 import { authClient } from "~/lib/auth-client";
+import { auth } from "~/utils/auth";
 
-export const Route = createFileRoute("/artworks/$artworkId")({
-  component: ArtworkDetail,
+export const Route = createFileRoute("/artworks/$artworkId/edit")({
+  component: EditArtwork,
+  beforeLoad: async () => {
+    const request = getWebRequest();
+    if (!request?.headers) {
+      throw redirect({ to: "/" });
+    }
+
+    const session = await auth.api.getSession({ headers: request.headers });
+    if (!session || session.user.email !== "webdevcody@gmail.com") {
+      throw redirect({ to: "/unauthorized" });
+    }
+  },
 });
 
-function ArtworkDetail() {
+function EditArtwork() {
   const { artworkId } = Route.useParams();
   const { data: artwork, isLoading, error } = useGetArtworkById(artworkId);
   const { data: sessionData } = authClient.useSession();
-
-  // Check if user is admin
-  const isAdmin = sessionData?.user && (sessionData.user as any).isAdmin;
 
   if (isLoading) {
     return (
@@ -84,21 +94,26 @@ function ArtworkDetail() {
     );
   }
 
-  const handleBuy = () => {
-    console.log(`Buy clicked for ${artwork.title}`);
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="mb-6">
-          <Link to="/browse">
+          <Link to="/artworks/$artworkId" params={{ artworkId }}>
             <Button variant="outline" size="sm">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Browse
+              Back to Artwork
             </Button>
           </Link>
+        </div>
+
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 text-foreground">
+            Edit Artwork
+          </h1>
+          <p className="text-muted-foreground">
+            Update the details for "{artwork.title}"
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -126,55 +141,35 @@ function ArtworkDetail() {
 
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-bold mb-2 text-foreground">
-                {artwork.title}
-              </h1>
-              <p className="text-3xl font-bold text-primary">
-                ${artwork.price.toFixed(2)}
-              </p>
+              <h2 className="text-xl font-semibold mb-2 text-foreground">
+                Current Details
+              </h2>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>
+                  <strong>Title:</strong> {artwork.title}
+                </p>
+                <p>
+                  <strong>Price:</strong> ${artwork.price.toFixed(2)}
+                </p>
+                <p>
+                  <strong>For Sale:</strong> {artwork.isForSale ? "Yes" : "No"}
+                </p>
+                {artwork.description && (
+                  <p>
+                    <strong>Description:</strong> {artwork.description}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-2 text-foreground">
-                Description
+              <h2 className="text-xl font-semibold mb-4 text-foreground">
+                Edit Form
               </h2>
-              <p className="text-muted-foreground leading-relaxed">
-                {artwork.description || "No description available."}
-              </p>
+              <EditArtworkForm artwork={artwork}>
+                <Button className="w-full">Open Edit Form</Button>
+              </EditArtworkForm>
             </div>
-
-            {isAdmin ? (
-              <div className="pt-4">
-                <Link to="/artworks/$artworkId/edit" params={{ artworkId }}>
-                  <Button size="lg" className="w-full">
-                    <Edit className="w-4 h-4 mr-2" />
-                    Edit Artwork
-                  </Button>
-                </Link>
-              </div>
-            ) : artwork.isForSale ? (
-              <div className="pt-4 space-y-3">
-                <AddToCartButton
-                  artwork={artwork}
-                  size="lg"
-                  className="w-full"
-                />
-                <Button
-                  onClick={handleBuy}
-                  size="lg"
-                  className="w-full"
-                  variant="outline"
-                >
-                  Buy Now
-                </Button>
-              </div>
-            ) : (
-              <div className="pt-4">
-                <Button disabled size="lg" className="w-full" variant="outline">
-                  Not Available for Sale
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </main>

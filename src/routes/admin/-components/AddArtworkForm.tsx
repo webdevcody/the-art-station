@@ -28,8 +28,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useUpdateArtwork } from "@/routes/-hooks/use-update-artwork";
-import { ArtworkWithUser } from "@/types/artwork";
+import { useAddArtwork } from "@/routes/-hooks/use-add-artwork";
 
 const formSchema = z.object({
   title: z
@@ -44,23 +43,22 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface EditArtworkFormProps {
-  artwork: ArtworkWithUser;
+interface AddArtworkFormProps {
   children: React.ReactNode;
 }
 
-export function EditArtworkForm({ artwork, children }: EditArtworkFormProps) {
+export function AddArtworkForm({ children }: AddArtworkFormProps) {
   const [open, setOpen] = useState(false);
-  const updateArtworkMutation = useUpdateArtwork();
+  const addArtworkMutation = useAddArtwork();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: artwork.title,
-      description: artwork.description || "",
-      price: artwork.price.toString(),
+      title: "",
+      description: "",
+      price: "",
       image: undefined,
-      isForSale: artwork.isForSale,
+      isForSale: true,
     },
   });
 
@@ -96,23 +94,21 @@ export function EditArtworkForm({ artwork, children }: EditArtworkFormProps) {
         imageMimeType = data.image.type;
       }
 
-      await updateArtworkMutation.mutateAsync({
-        data: {
-          id: artwork.id,
-          title: data.title,
-          description: data.description,
-          price,
-          imageData,
-          imageMimeType,
-          isForSale: data.isForSale,
-        },
+      await addArtworkMutation.mutateAsync({
+        title: data.title,
+        description: data.description || undefined,
+        price,
+        imageData,
+        imageMimeType,
+        isForSale: data.isForSale,
       });
 
-      toast.success("Artwork updated successfully!");
+      toast.success("Artwork added successfully!");
       setOpen(false);
+      form.reset();
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update artwork"
+        error instanceof Error ? error.message : "Failed to add artwork"
       );
     }
   };
@@ -122,10 +118,10 @@ export function EditArtworkForm({ artwork, children }: EditArtworkFormProps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px] max-h-[90vh] flex flex-col">
         <DialogHeader className="flex-shrink-0">
-          <DialogTitle>Edit Artwork</DialogTitle>
+          <DialogTitle>Add New Artwork</DialogTitle>
           <DialogDescription>
-            Update the details for "{artwork.title}". Changes will be saved
-            immediately.
+            Add a new piece of artwork to your gallery. Fill out the details
+            below.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-1 pr-4 h-0">
@@ -227,7 +223,7 @@ export function EditArtworkForm({ artwork, children }: EditArtworkFormProps) {
                       />
                     </FormControl>
                     <FormDescription>
-                      Upload a new image to replace the current one (optional).
+                      Upload an image of the artwork (JPG, PNG, etc.).
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -241,19 +237,19 @@ export function EditArtworkForm({ artwork, children }: EditArtworkFormProps) {
             type="button"
             variant="outline"
             onClick={() => setOpen(false)}
-            disabled={updateArtworkMutation.isPending}
+            disabled={addArtworkMutation.isPending}
           >
             Cancel
           </Button>
           <Button
             type="submit"
-            disabled={updateArtworkMutation.isPending}
+            disabled={addArtworkMutation.isPending}
             onClick={form.handleSubmit(onSubmit)}
           >
-            {updateArtworkMutation.isPending && (
+            {addArtworkMutation.isPending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Update Artwork
+            Add Artwork
           </Button>
         </DialogFooter>
       </DialogContent>

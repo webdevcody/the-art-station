@@ -79,6 +79,7 @@ export const artwork = pgTable("artwork", {
   price: integer("price").notNull(),
   imageData: text("image_data"),
   imageMimeType: text("image_mime_type"),
+  isForSale: boolean("is_for_sale").notNull().default(true),
   userId: text("user_id")
     .notNull()
     .references(() => user.id),

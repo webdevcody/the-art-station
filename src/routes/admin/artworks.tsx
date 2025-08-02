@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { MoreHorizontal, Plus, Search, Filter, Eye } from "lucide-react";
-import { AddArtworkForm } from "@/routes/-components/AddArtworkForm";
+import { AddArtworkForm } from "~/routes/admin/-components/AddArtworkForm";
 import { useGetArtworks } from "@/routes/-hooks/use-get-artworks";
 
 export const Route = createFileRoute("/admin/artworks")({
@@ -18,9 +18,12 @@ function ArtworksManagement() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Artworks Management</h1>
+          <h1 className="text-3xl font-bold text-foreground">
+            Artworks Management
+          </h1>
           <p className="text-muted-foreground mt-2">
-            Manage artwork submissions, reviews, and featured pieces across the gallery.
+            Manage artwork submissions, reviews, and featured pieces across the
+            gallery.
           </p>
         </div>
         <AddArtworkForm>
@@ -34,10 +37,7 @@ function ArtworksManagement() {
       <div className="flex items-center space-x-4">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search artworks..." 
-            className="pl-10" 
-          />
+          <Input placeholder="Search artworks..." className="pl-10" />
         </div>
         <Button variant="outline" className="flex items-center gap-2">
           <Filter className="h-4 w-4" />
@@ -53,7 +53,9 @@ function ArtworksManagement() {
           </div>
         ) : artworks.length === 0 ? (
           <div className="col-span-full text-center py-8">
-            <p className="text-muted-foreground">No artworks found. Add your first artwork!</p>
+            <p className="text-muted-foreground">
+              No artworks found. Add your first artwork!
+            </p>
           </div>
         ) : (
           artworks.map((artwork) => (
@@ -77,7 +79,9 @@ function ArtworksManagement() {
                 <div className="flex justify-between items-start">
                   <div>
                     <CardTitle className="text-lg">{artwork.title}</CardTitle>
-                    <p className="text-sm text-muted-foreground">by {artwork.user?.name || 'Unknown'}</p>
+                    <p className="text-sm text-muted-foreground">
+                      by {artwork.user?.name || "Unknown"}
+                    </p>
                   </div>
                   <Button variant="ghost" size="icon">
                     <MoreHorizontal className="h-4 w-4" />
@@ -86,12 +90,12 @@ function ArtworksManagement() {
               </CardHeader>
               <CardContent className="pt-0">
                 <div className="flex justify-between items-center mb-3">
-                  <Badge variant="default">
-                    Published
-                  </Badge>
-                  <span className="font-semibold text-lg">${artwork.price.toFixed(2)}</span>
+                  <Badge variant="default">Published</Badge>
+                  <span className="font-semibold text-lg">
+                    ${artwork.price.toFixed(2)}
+                  </span>
                 </div>
-                
+
                 <div className="text-xs text-muted-foreground">
                   Created {new Date(artwork.createdAt).toLocaleDateString()}
                 </div>
@@ -107,10 +111,10 @@ function ArtworksManagement() {
             <CardTitle className="text-lg">Total Artworks</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-primary">{artworks.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Total artworks
-            </p>
+            <div className="text-3xl font-bold text-primary">
+              {artworks.length}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">Total artworks</p>
           </CardContent>
         </Card>
 
@@ -144,9 +148,7 @@ function ArtworksManagement() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-purple-600">$12,450</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              This month
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">This month</p>
           </CardContent>
         </Card>
       </div>

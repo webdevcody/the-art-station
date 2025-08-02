@@ -12,14 +12,14 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
+import { Route as CartRouteImport } from './routes/cart'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as ArtworksArtworkIdRouteImport } from './routes/artworks/$artworkId'
-import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminArtworksRouteImport } from './routes/admin/artworks'
-import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
+import { Route as ArtworksArtworkIdEditRouteImport } from './routes/artworks/$artworkId/edit'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -27,6 +27,11 @@ const rootServerRouteImport = createServerRootRoute()
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
   path: '/unauthorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BrowseRoute = BrowseRouteImport.update({
@@ -54,20 +59,15 @@ const ArtworksArtworkIdRoute = ArtworksArtworkIdRouteImport.update({
   path: '/artworks/$artworkId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminUsersRoute = AdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
 const AdminArtworksRoute = AdminArtworksRouteImport.update({
   id: '/artworks',
   path: '/artworks',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
-  getParentRoute: () => AdminRouteRoute,
+const ArtworksArtworkIdEditRoute = ArtworksArtworkIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => ArtworksArtworkIdRoute,
 } as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
   id: '/api/auth/$',
@@ -79,34 +79,34 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/browse': typeof BrowseRoute
+  '/cart': typeof CartRoute
   '/unauthorized': typeof UnauthorizedRoute
-  '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/artworks': typeof AdminArtworksRoute
-  '/admin/users': typeof AdminUsersRoute
-  '/artworks/$artworkId': typeof ArtworksArtworkIdRoute
+  '/artworks/$artworkId': typeof ArtworksArtworkIdRouteWithChildren
   '/admin/': typeof AdminIndexRoute
+  '/artworks/$artworkId/edit': typeof ArtworksArtworkIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/cart': typeof CartRoute
   '/unauthorized': typeof UnauthorizedRoute
-  '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/artworks': typeof AdminArtworksRoute
-  '/admin/users': typeof AdminUsersRoute
-  '/artworks/$artworkId': typeof ArtworksArtworkIdRoute
+  '/artworks/$artworkId': typeof ArtworksArtworkIdRouteWithChildren
   '/admin': typeof AdminIndexRoute
+  '/artworks/$artworkId/edit': typeof ArtworksArtworkIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/browse': typeof BrowseRoute
+  '/cart': typeof CartRoute
   '/unauthorized': typeof UnauthorizedRoute
-  '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/artworks': typeof AdminArtworksRoute
-  '/admin/users': typeof AdminUsersRoute
-  '/artworks/$artworkId': typeof ArtworksArtworkIdRoute
+  '/artworks/$artworkId': typeof ArtworksArtworkIdRouteWithChildren
   '/admin/': typeof AdminIndexRoute
+  '/artworks/$artworkId/edit': typeof ArtworksArtworkIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -114,41 +114,42 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/cart'
     | '/unauthorized'
-    | '/admin/analytics'
     | '/admin/artworks'
-    | '/admin/users'
     | '/artworks/$artworkId'
     | '/admin/'
+    | '/artworks/$artworkId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/browse'
+    | '/cart'
     | '/unauthorized'
-    | '/admin/analytics'
     | '/admin/artworks'
-    | '/admin/users'
     | '/artworks/$artworkId'
     | '/admin'
+    | '/artworks/$artworkId/edit'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/browse'
+    | '/cart'
     | '/unauthorized'
-    | '/admin/analytics'
     | '/admin/artworks'
-    | '/admin/users'
     | '/artworks/$artworkId'
     | '/admin/'
+    | '/artworks/$artworkId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   BrowseRoute: typeof BrowseRoute
+  CartRoute: typeof CartRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
-  ArtworksArtworkIdRoute: typeof ArtworksArtworkIdRoute
+  ArtworksArtworkIdRoute: typeof ArtworksArtworkIdRouteWithChildren
 }
 export interface FileServerRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
@@ -179,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/unauthorized'
       fullPath: '/unauthorized'
       preLoaderRoute: typeof UnauthorizedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/browse': {
@@ -216,13 +224,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArtworksArtworkIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/users': {
-      id: '/admin/users'
-      path: '/users'
-      fullPath: '/admin/users'
-      preLoaderRoute: typeof AdminUsersRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/admin/artworks': {
       id: '/admin/artworks'
       path: '/artworks'
@@ -230,12 +231,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminArtworksRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/analytics': {
-      id: '/admin/analytics'
-      path: '/analytics'
-      fullPath: '/admin/analytics'
-      preLoaderRoute: typeof AdminAnalyticsRouteImport
-      parentRoute: typeof AdminRouteRoute
+    '/artworks/$artworkId/edit': {
+      id: '/artworks/$artworkId/edit'
+      path: '/edit'
+      fullPath: '/artworks/$artworkId/edit'
+      preLoaderRoute: typeof ArtworksArtworkIdEditRouteImport
+      parentRoute: typeof ArtworksArtworkIdRoute
     }
   }
 }
@@ -252,16 +253,12 @@ declare module '@tanstack/react-start/server' {
 }
 
 interface AdminRouteRouteChildren {
-  AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminArtworksRoute: typeof AdminArtworksRoute
-  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
-  AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminArtworksRoute: AdminArtworksRoute,
-  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -269,12 +266,24 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface ArtworksArtworkIdRouteChildren {
+  ArtworksArtworkIdEditRoute: typeof ArtworksArtworkIdEditRoute
+}
+
+const ArtworksArtworkIdRouteChildren: ArtworksArtworkIdRouteChildren = {
+  ArtworksArtworkIdEditRoute: ArtworksArtworkIdEditRoute,
+}
+
+const ArtworksArtworkIdRouteWithChildren =
+  ArtworksArtworkIdRoute._addFileChildren(ArtworksArtworkIdRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   BrowseRoute: BrowseRoute,
+  CartRoute: CartRoute,
   UnauthorizedRoute: UnauthorizedRoute,
-  ArtworksArtworkIdRoute: ArtworksArtworkIdRoute,
+  ArtworksArtworkIdRoute: ArtworksArtworkIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

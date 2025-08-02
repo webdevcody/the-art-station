@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ModeToggle";
+import { CartIcon } from "@/components/CartIcon";
 import { authClient } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -41,6 +42,7 @@ export function Header() {
         </Link>
 
         <div className="flex items-center space-x-4">
+          <CartIcon />
           {sessionData ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

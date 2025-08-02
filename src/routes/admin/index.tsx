@@ -43,7 +43,8 @@ function AdminDashboard() {
       <div>
         <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
         <p className="text-muted-foreground mt-2">
-          Welcome to the Art Station admin dashboard. Here's an overview of your platform.
+          Welcome to the Art Station admin dashboard. Here's an overview of your
+          platform.
         </p>
       </div>
 
@@ -61,7 +62,8 @@ function AdminDashboard() {
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
                 <p className="text-xs text-muted-foreground">
-                  <span className="text-green-600">{stat.change}</span> from last month
+                  <span className="text-green-600">{stat.change}</span> from
+                  last month
                 </p>
               </CardContent>
             </Card>
@@ -87,7 +89,9 @@ function AdminDashboard() {
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <div className="flex-1">
                   <p className="text-sm font-medium">User registration</p>
-                  <p className="text-xs text-muted-foreground">15 minutes ago</p>
+                  <p className="text-xs text-muted-foreground">
+                    15 minutes ago
+                  </p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
@@ -110,20 +114,28 @@ function AdminDashboard() {
               <Link to="/browse">
                 <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
                   <p className="font-medium">Browse Artwork</p>
-                  <p className="text-xs text-muted-foreground">View artwork as a visitor</p>
+                  <p className="text-xs text-muted-foreground">
+                    View artwork as a visitor
+                  </p>
                 </button>
               </Link>
               <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
                 <p className="font-medium">Review Pending Artworks</p>
-                <p className="text-xs text-muted-foreground">3 items awaiting approval</p>
+                <p className="text-xs text-muted-foreground">
+                  3 items awaiting approval
+                </p>
               </button>
               <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
                 <p className="font-medium">Manage Featured Artists</p>
-                <p className="text-xs text-muted-foreground">Update homepage showcase</p>
+                <p className="text-xs text-muted-foreground">
+                  Update homepage showcase
+                </p>
               </button>
               <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
                 <p className="font-medium">System Settings</p>
-                <p className="text-xs text-muted-foreground">Configure platform preferences</p>
+                <p className="text-xs text-muted-foreground">
+                  Configure platform preferences
+                </p>
               </button>
             </div>
           </CardContent>

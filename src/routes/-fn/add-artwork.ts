@@ -6,11 +6,18 @@ import { z } from "zod";
 import { auth } from "@/utils/auth";
 
 const addArtworkSchema = z.object({
-  title: z.string().min(1, "Title is required").max(100, "Title must be less than 100 characters"),
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(100, "Title must be less than 100 characters"),
   description: z.string().optional(),
-  price: z.number().min(0, "Price must be positive").max(999999, "Price is too high"),
+  price: z
+    .number()
+    .min(0, "Price must be positive")
+    .max(999999, "Price is too high"),
   imageData: z.string().optional(),
   imageMimeType: z.string().optional(),
+  isForSale: z.boolean(),
 });
 
 export type AddArtworkInput = z.infer<typeof addArtworkSchema>;
@@ -22,7 +29,7 @@ export const addArtwork = createServerFn({ method: "POST" })
     const session = await auth.api.getSession({
       headers: request.headers,
     });
-    
+
     if (!session?.user) {
       throw new Error("Unauthorized");
     }
@@ -40,6 +47,7 @@ export const addArtwork = createServerFn({ method: "POST" })
         price: Math.round(data.price * 100), // Store price in cents
         imageData: data.imageData,
         imageMimeType: data.imageMimeType,
+        isForSale: data.isForSale,
         userId: session.user.id,
         createdAt: new Date(),
         updatedAt: new Date(),

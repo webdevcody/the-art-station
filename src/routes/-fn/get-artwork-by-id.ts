@@ -14,6 +14,7 @@ export const getArtworkById = createServerFn({ method: "GET" })
         price: artwork.price,
         imageData: artwork.imageData,
         imageMimeType: artwork.imageMimeType,
+        isForSale: artwork.isForSale,
         userId: artwork.userId,
         createdAt: artwork.createdAt,
         updatedAt: artwork.updatedAt,

@@ -1,0 +1,1 @@
+ALTER TABLE "artwork" ADD COLUMN "is_for_sale" boolean DEFAULT true NOT NULL;

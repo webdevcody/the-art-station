@@ -13,6 +13,7 @@ const updateArtworkSchema = z.object({
   price: z.number().min(0),
   imageData: z.string().optional(),
   imageMimeType: z.string().optional(),
+  isForSale: z.boolean(),
 });
 
 export const updateArtwork = createServerFn({ method: "POST" })
@@ -31,6 +32,7 @@ export const updateArtwork = createServerFn({ method: "POST" })
       title: data.title,
       description: data.description,
       price: Math.round(data.price * 100), // Convert to cents
+      isForSale: data.isForSale,
       updatedAt: new Date(),
     };
 
