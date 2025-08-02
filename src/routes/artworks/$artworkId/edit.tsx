@@ -2,18 +2,14 @@ import {
   createFileRoute,
   Link,
   redirect,
-  useSearch,
   useNavigate,
 } from "@tanstack/react-router";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { useGetArtworkById } from "../../-hooks/use-get-artwork-by-id";
 import { authClient } from "~/lib/auth-client";
 import { isAdminFn } from "~/routes/-hooks/use-is-admin";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -290,13 +286,11 @@ function EditArtwork() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-1 container mx-auto px-4 py-8">
           <div className="flex justify-center items-center h-64">
             <p className="text-muted-foreground">Loading artwork...</p>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -304,7 +298,6 @@ function EditArtwork() {
   if (error) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-1 container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4 text-foreground">
@@ -321,7 +314,6 @@ function EditArtwork() {
             </Link>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -329,7 +321,6 @@ function EditArtwork() {
   if (!artwork) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-1 container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4 text-foreground">
@@ -346,14 +337,12 @@ function EditArtwork() {
             </Link>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="mb-6">
           <Link
@@ -407,7 +396,6 @@ function EditArtwork() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

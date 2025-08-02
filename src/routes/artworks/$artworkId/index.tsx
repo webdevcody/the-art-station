@@ -1,6 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
 import { ArrowLeft, Edit, ShoppingCart } from "lucide-react";
@@ -24,13 +22,11 @@ function ArtworkDetail() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-1 container mx-auto px-4 py-8">
           <div className="flex justify-center items-center h-64">
             <p className="text-muted-foreground">Loading artwork...</p>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -38,7 +34,6 @@ function ArtworkDetail() {
   if (error) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-1 container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4 text-foreground">
@@ -55,7 +50,6 @@ function ArtworkDetail() {
             </Link>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -63,7 +57,6 @@ function ArtworkDetail() {
   if (!artwork) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-1 container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4 text-foreground">
@@ -80,14 +73,12 @@ function ArtworkDetail() {
             </Link>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="mb-6">
           <Link to="/browse">
@@ -183,7 +174,6 @@ function ArtworkDetail() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

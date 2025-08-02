@@ -17,6 +17,8 @@ import { authClient } from "~/lib/auth-client";
 import { ThemeProvider } from "~/components/ThemeProvider";
 import { CartProvider } from "~/contexts/CartContext";
 import { Toaster } from "sonner";
+import { Footer } from "~/components/Footer";
+import { Header } from "~/components/Header";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -136,7 +138,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
           <CartProvider>
             <Toaster />
+            <Header />
             {children}
+            <Footer />
             <TanStackRouterDevtools position="bottom-right" />
             <ReactQueryDevtools buttonPosition="bottom-left" />
             <Scripts />

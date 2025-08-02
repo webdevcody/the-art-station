@@ -1,6 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,13 +25,11 @@ function Browse() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-1 container mx-auto px-4 py-8">
           <div className="flex justify-center items-center h-64">
             <p className="text-muted-foreground">Loading artwork...</p>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -41,7 +37,6 @@ function Browse() {
   if (error) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-1 container mx-auto px-4 py-8">
           <div className="flex justify-center items-center h-64">
             <p className="text-destructive">
@@ -49,14 +44,12 @@ function Browse() {
             </p>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 text-foreground">
@@ -145,7 +138,6 @@ function Browse() {
           </div>
         )}
       </main>
-      <Footer />
     </div>
   );
 }

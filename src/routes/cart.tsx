@@ -1,6 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCart } from "@/contexts/CartContext";
@@ -8,7 +6,6 @@ import { useCreateCheckoutSession } from "./-hooks/use-create-checkout-session";
 import { useCheckCartAvailability } from "./-hooks/use-check-cart-availability";
 import { Trash2, ShoppingCart, CreditCard, AlertTriangle } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/cart")({
   component: Cart,
@@ -30,7 +27,6 @@ function Cart() {
   if (cart.items.length === 0) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-1 container mx-auto px-4 py-8">
           <div className="max-w-2xl mx-auto">
             <div className="text-center">
@@ -45,14 +41,12 @@ function Cart() {
             </div>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-8">
@@ -252,7 +246,6 @@ function Cart() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
