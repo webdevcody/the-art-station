@@ -18,7 +18,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as ArtworksArtworkIdRouteImport } from './routes/artworks/$artworkId'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
-import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminArtworksRouteImport } from './routes/admin/artworks'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
@@ -60,11 +59,6 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
 const AdminArtworksRoute = AdminArtworksRouteImport.update({
   id: '/artworks',
   path: '/artworks',
@@ -88,7 +82,6 @@ export interface FileRoutesByFullPath {
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/artworks': typeof AdminArtworksRoute
-  '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/artworks/$artworkId': typeof ArtworksArtworkIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -99,7 +92,6 @@ export interface FileRoutesByTo {
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/artworks': typeof AdminArtworksRoute
-  '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/artworks/$artworkId': typeof ArtworksArtworkIdRoute
   '/admin': typeof AdminIndexRoute
@@ -112,7 +104,6 @@ export interface FileRoutesById {
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/artworks': typeof AdminArtworksRoute
-  '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/artworks/$artworkId': typeof ArtworksArtworkIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -126,7 +117,6 @@ export interface FileRouteTypes {
     | '/unauthorized'
     | '/admin/analytics'
     | '/admin/artworks'
-    | '/admin/settings'
     | '/admin/users'
     | '/artworks/$artworkId'
     | '/admin/'
@@ -137,7 +127,6 @@ export interface FileRouteTypes {
     | '/unauthorized'
     | '/admin/analytics'
     | '/admin/artworks'
-    | '/admin/settings'
     | '/admin/users'
     | '/artworks/$artworkId'
     | '/admin'
@@ -149,7 +138,6 @@ export interface FileRouteTypes {
     | '/unauthorized'
     | '/admin/analytics'
     | '/admin/artworks'
-    | '/admin/settings'
     | '/admin/users'
     | '/artworks/$artworkId'
     | '/admin/'
@@ -235,13 +223,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/settings': {
-      id: '/admin/settings'
-      path: '/settings'
-      fullPath: '/admin/settings'
-      preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/admin/artworks': {
       id: '/admin/artworks'
       path: '/artworks'
@@ -273,7 +254,6 @@ declare module '@tanstack/react-start/server' {
 interface AdminRouteRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminArtworksRoute: typeof AdminArtworksRoute
-  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -281,7 +261,6 @@ interface AdminRouteRouteChildren {
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminArtworksRoute: AdminArtworksRoute,
-  AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }

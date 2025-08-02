@@ -9,6 +9,8 @@ const addArtworkSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title must be less than 100 characters"),
   description: z.string().optional(),
   price: z.number().min(0, "Price must be positive").max(999999, "Price is too high"),
+  imageData: z.string().optional(),
+  imageMimeType: z.string().optional(),
 });
 
 export type AddArtworkInput = z.infer<typeof addArtworkSchema>;
@@ -36,6 +38,8 @@ export const addArtwork = createServerFn({ method: "POST" })
         title: data.title,
         description: data.description,
         price: Math.round(data.price * 100), // Store price in cents
+        imageData: data.imageData,
+        imageMimeType: data.imageMimeType,
         userId: session.user.id,
         createdAt: new Date(),
         updatedAt: new Date(),

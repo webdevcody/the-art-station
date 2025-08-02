@@ -77,6 +77,8 @@ export const artwork = pgTable("artwork", {
   title: text("title").notNull(),
   description: text("description"),
   price: integer("price").notNull(),
+  imageData: text("image_data"),
+  imageMimeType: text("image_mime_type"),
   userId: text("user_id")
     .notNull()
     .references(() => user.id),
@@ -84,10 +86,51 @@ export const artwork = pgTable("artwork", {
   updatedAt: timestamp("updated_at").notNull(),
 });
 
-export const artworkRelations = relations(artwork, ({ one }) => ({
+export const artworkRelations = relations(artwork, ({ one, many }) => ({
   user: one(user, {
     fields: [artwork.userId],
     references: [user.id],
+  }),
+  orderItems: many(orderItem),
+}));
+
+export const order = pgTable("order", {
+  id: text("id").primaryKey(),
+  customerName: text("customer_name").notNull(),
+  customerEmail: text("customer_email").notNull(),
+  customerAddress: text("customer_address").notNull(),
+  totalAmount: integer("total_amount").notNull(), // in cents
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  status: text("status", { enum: ["new", "processed", "cancelled"] }).notNull().default("new"),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+});
+
+export const orderRelations = relations(order, ({ many }) => ({
+  orderItems: many(orderItem),
+}));
+
+export const orderItem = pgTable("order_item", {
+  id: text("id").primaryKey(),
+  orderId: text("order_id")
+    .notNull()
+    .references(() => order.id),
+  artworkId: text("artwork_id")
+    .notNull()
+    .references(() => artwork.id),
+  quantity: integer("quantity").notNull().default(1),
+  priceAtTime: integer("price_at_time").notNull(), // in cents, price when purchased
+  createdAt: timestamp("created_at").notNull(),
+});
+
+export const orderItemRelations = relations(orderItem, ({ one }) => ({
+  order: one(order, {
+    fields: [orderItem.orderId],
+    references: [order.id],
+  }),
+  artwork: one(artwork, {
+    fields: [orderItem.artworkId],
+    references: [artwork.id],
   }),
 }));
 
@@ -96,3 +139,5 @@ export type Session = typeof session.$inferSelect;
 export type Account = typeof account.$inferSelect;
 export type Verification = typeof verification.$inferSelect;
 export type Artwork = typeof artwork.$inferSelect;
+export type Order = typeof order.$inferSelect;
+export type OrderItem = typeof orderItem.$inferSelect;

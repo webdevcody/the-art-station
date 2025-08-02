@@ -5,47 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { MoreHorizontal, Plus, Search, Filter, Eye } from "lucide-react";
 import { AddArtworkForm } from "@/routes/-components/AddArtworkForm";
+import { useGetArtworks } from "@/routes/-hooks/use-get-artworks";
 
 export const Route = createFileRoute("/admin/artworks")({
   component: ArtworksManagement,
 });
 
 function ArtworksManagement() {
-  const mockArtworks = [
-    {
-      id: 1,
-      title: "Sunset Dreams",
-      artist: "Alice Johnson",
-      status: "Published",
-      price: "$125",
-      views: 1234,
-      likes: 89,
-      createdAt: "2024-01-20",
-      thumbnail: "/api/placeholder/150/150",
-    },
-    {
-      id: 2,
-      title: "Ocean Waves",
-      artist: "Carol Davis",
-      status: "Pending Review",
-      price: "$75",
-      views: 456,
-      likes: 23,
-      createdAt: "2024-02-15",
-      thumbnail: "/api/placeholder/150/150",
-    },
-    {
-      id: 3,
-      title: "Mountain Vista",
-      artist: "Alice Johnson",
-      status: "Draft",
-      price: "$200",
-      views: 0,
-      likes: 0,
-      createdAt: "2024-03-01",
-      thumbnail: "/api/placeholder/150/150",
-    },
-  ];
+  const { data: artworks = [], isLoading } = useGetArtworks();
 
   return (
     <div className="space-y-6">
@@ -80,50 +47,58 @@ function ArtworksManagement() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockArtworks.map((artwork) => (
-          <Card key={artwork.id} className="overflow-hidden">
-            <div className="aspect-square bg-muted relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-600 opacity-20" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Eye className="h-12 w-12 text-muted-foreground" />
+        {isLoading ? (
+          <div className="col-span-full text-center py-8">
+            <p className="text-muted-foreground">Loading artworks...</p>
+          </div>
+        ) : artworks.length === 0 ? (
+          <div className="col-span-full text-center py-8">
+            <p className="text-muted-foreground">No artworks found. Add your first artwork!</p>
+          </div>
+        ) : (
+          artworks.map((artwork) => (
+            <Card key={artwork.id} className="overflow-hidden">
+              <div className="aspect-square bg-muted relative">
+                {artwork.imageData ? (
+                  <img
+                    src={artwork.imageData}
+                    alt={artwork.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-600 opacity-20">
+                    <div className="flex items-center justify-center h-full">
+                      <Eye className="h-12 w-12 text-muted-foreground" />
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="text-lg">{artwork.title}</CardTitle>
-                  <p className="text-sm text-muted-foreground">by {artwork.artist}</p>
+              <CardHeader className="pb-3">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="text-lg">{artwork.title}</CardTitle>
+                    <p className="text-sm text-muted-foreground">by {artwork.user?.name || 'Unknown'}</p>
+                  </div>
+                  <Button variant="ghost" size="icon">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
                 </div>
-                <Button variant="ghost" size="icon">
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="flex justify-between items-center mb-3">
-                <Badge 
-                  variant={
-                    artwork.status === "Published" ? "default" : 
-                    artwork.status === "Pending Review" ? "secondary" : 
-                    "outline"
-                  }
-                >
-                  {artwork.status}
-                </Badge>
-                <span className="font-semibold text-lg">{artwork.price}</span>
-              </div>
-              
-              <div className="flex justify-between text-sm text-muted-foreground mb-3">
-                <span>{artwork.views} views</span>
-                <span>{artwork.likes} likes</span>
-              </div>
-              
-              <div className="text-xs text-muted-foreground">
-                Created {artwork.createdAt}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex justify-between items-center mb-3">
+                  <Badge variant="default">
+                    Published
+                  </Badge>
+                  <span className="font-semibold text-lg">${artwork.price.toFixed(2)}</span>
+                </div>
+                
+                <div className="text-xs text-muted-foreground">
+                  Created {new Date(artwork.createdAt).toLocaleDateString()}
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -132,9 +107,9 @@ function ArtworksManagement() {
             <CardTitle className="text-lg">Total Artworks</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-primary">567</div>
+            <div className="text-3xl font-bold text-primary">{artworks.length}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              +12 this week
+              Total artworks
             </p>
           </CardContent>
         </Card>

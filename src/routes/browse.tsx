@@ -55,8 +55,18 @@ function Browse() {
             {artworks.map((artwork) => (
               <Card key={artwork.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <CardHeader className="p-0">
-                  <div className="w-full h-64 bg-muted flex items-center justify-center">
-                    <p className="text-muted-foreground">No image available</p>
+                  <div className="w-full h-64 bg-muted relative overflow-hidden">
+                    {artwork.imageData ? (
+                      <img
+                        src={artwork.imageData}
+                        alt={artwork.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-muted flex items-center justify-center">
+                        <p className="text-muted-foreground">No image available</p>
+                      </div>
+                    )}
                   </div>
                 </CardHeader>
                 <CardContent className="p-4">

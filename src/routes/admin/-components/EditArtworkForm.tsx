@@ -26,7 +26,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useAddArtwork } from "@/routes/-hooks/use-add-artwork";
+import { useUpdateArtwork } from "@/routes/-hooks/use-update-artwork";
+import { Artwork } from "@/db/schema";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title must be less than 100 characters"),
@@ -37,20 +38,21 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface AddArtworkFormProps {
+interface EditArtworkFormProps {
+  artwork: Artwork & { user?: { id: string; name: string; email: string } | null };
   children: React.ReactNode;
 }
 
-export function AddArtworkForm({ children }: AddArtworkFormProps) {
+export function EditArtworkForm({ artwork, children }: EditArtworkFormProps) {
   const [open, setOpen] = useState(false);
-  const addArtworkMutation = useAddArtwork();
+  const updateArtworkMutation = useUpdateArtwork();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      price: "",
+      title: artwork.title,
+      description: artwork.description || "",
+      price: artwork.price.toString(),
       image: undefined,
     },
   });
@@ -85,19 +87,21 @@ export function AddArtworkForm({ children }: AddArtworkFormProps) {
         imageMimeType = data.image.type;
       }
 
-      await addArtworkMutation.mutateAsync({
-        title: data.title,
-        description: data.description || undefined,
-        price,
-        imageData,
-        imageMimeType,
+      await updateArtworkMutation.mutateAsync({
+        data: {
+          id: artwork.id,
+          title: data.title,
+          description: data.description,
+          price,
+          imageData,
+          imageMimeType,
+        }
       });
 
-      toast.success("Artwork added successfully!");
+      toast.success("Artwork updated successfully!");
       setOpen(false);
-      form.reset();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to add artwork");
+      toast.error(error instanceof Error ? error.message : "Failed to update artwork");
     }
   };
 
@@ -108,9 +112,9 @@ export function AddArtworkForm({ children }: AddArtworkFormProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add New Artwork</DialogTitle>
+          <DialogTitle>Edit Artwork</DialogTitle>
           <DialogDescription>
-            Add a new piece of artwork to your gallery. Fill out the details below.
+            Update the details for "{artwork.title}". Changes will be saved immediately.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -189,7 +193,7 @@ export function AddArtworkForm({ children }: AddArtworkFormProps) {
                     />
                   </FormControl>
                   <FormDescription>
-                    Upload an image of the artwork (JPG, PNG, etc.).
+                    Upload a new image to replace the current one (optional).
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -200,18 +204,18 @@ export function AddArtworkForm({ children }: AddArtworkFormProps) {
                 type="button" 
                 variant="outline" 
                 onClick={() => setOpen(false)}
-                disabled={addArtworkMutation.isPending}
+                disabled={updateArtworkMutation.isPending}
               >
                 Cancel
               </Button>
               <Button 
                 type="submit" 
-                disabled={addArtworkMutation.isPending}
+                disabled={updateArtworkMutation.isPending}
               >
-                {addArtworkMutation.isPending && (
+                {updateArtworkMutation.isPending && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Add Artwork
+                Update Artwork
               </Button>
             </DialogFooter>
           </form>
