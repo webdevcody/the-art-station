@@ -44,7 +44,9 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
           currency: "usd",
           product_data: {
             name: item.title,
-            images: item.imageData ? [item.imageData] : undefined,
+            images: item.imageData
+              ? [`${process.env.BASE_URL}/api/images/${item.artworkId}`]
+              : undefined,
           },
           unit_amount: Math.round(item.price * 100), // Convert to cents
         },
@@ -54,8 +56,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
-        success_url: `${process.env.BASE_URL || "http://localhost:5173"}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.BASE_URL || "http://localhost:5173"}/cart`,
+        success_url: `${process.env.BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.BASE_URL}/cart`,
         metadata: {
           items: JSON.stringify(
             items.map((item) => ({
