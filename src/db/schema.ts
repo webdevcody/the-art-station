@@ -1,4 +1,4 @@
-import { boolean, text, timestamp, pgTable } from "drizzle-orm/pg-core";
+import { boolean, text, timestamp, pgTable, integer } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 export const user = pgTable("user", {
@@ -7,6 +7,7 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
+  isAdmin: boolean("is_admin").notNull().default(false),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
@@ -14,6 +15,7 @@ export const user = pgTable("user", {
 export const userRelations = relations(user, ({ one, many }) => ({
   sessions: many(session),
   accounts: many(account),
+  artworks: many(artwork),
 }));
 
 export const session = pgTable("session", {
@@ -70,7 +72,27 @@ export const verification = pgTable("verification", {
   updatedAt: timestamp("updated_at"),
 });
 
+export const artwork = pgTable("artwork", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  price: integer("price").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+});
+
+export const artworkRelations = relations(artwork, ({ one }) => ({
+  user: one(user, {
+    fields: [artwork.userId],
+    references: [user.id],
+  }),
+}));
+
 export type User = typeof user.$inferSelect;
 export type Session = typeof session.$inferSelect;
 export type Account = typeof account.$inferSelect;
 export type Verification = typeof verification.$inferSelect;
+export type Artwork = typeof artwork.$inferSelect;

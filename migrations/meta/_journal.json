@@ -8,6 +8,20 @@
       "when": 1754092427407,
       "tag": "0000_mysterious_triton",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1754093538936,
+      "tag": "0001_mighty_gideon",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1754094645587,
+      "tag": "0002_low_toad_men",
+      "breakpoints": true
     }
   ]
 }
