@@ -29,8 +29,35 @@ export function Header() {
           <div className="w-8 h-8 bg-gradient-to-r from-gradient-primary to-gradient-secondary rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">A</span>
           </div>
-          <span className="font-semibold text-lg">Art Station</span>
+          <span className="font-semibold text-lg">Addie's Art Station</span>
         </Link>
+
+        <nav className="hidden md:flex items-center space-x-6">
+          <Link
+            to="/browse"
+            className="text-sm font-medium hover:text-gradient-primary transition-colors"
+          >
+            Browse Art
+          </Link>
+          <Link
+            to="/about"
+            className="text-sm font-medium hover:text-gradient-primary transition-colors"
+          >
+            About
+          </Link>
+          <Link
+            to="/faq"
+            className="text-sm font-medium hover:text-gradient-primary transition-colors"
+          >
+            FAQ
+          </Link>
+          <Link
+            to="/contact"
+            className="text-sm font-medium hover:text-gradient-primary transition-colors"
+          >
+            Contact
+          </Link>
+        </nav>
 
         <div className="flex items-center space-x-4">
           <CartButton />

@@ -58,7 +58,32 @@ export default {
     			'gradient-primary-light': 'hsl(var(--gradient-primary-light))',
     			'gradient-secondary-light': 'hsl(var(--gradient-secondary-light))',
     			'gradient-primary-subtle': 'hsl(var(--gradient-primary-subtle))',
-    			'gradient-secondary-subtle': 'hsl(var(--gradient-secondary-subtle))'
+    			'gradient-secondary-subtle': 'hsl(var(--gradient-secondary-subtle))',
+    			// Additional girly colors
+    			'pink': {
+    				'50': 'hsl(350 100% 97%)',
+    				'100': 'hsl(345 100% 95%)',
+    				'200': 'hsl(340 100% 90%)',
+    				'300': 'hsl(335 100% 85%)',
+    				'400': 'hsl(330 100% 75%)',
+    				'500': 'hsl(320 100% 60%)',
+    				'600': 'hsl(315 100% 55%)',
+    				'700': 'hsl(310 100% 50%)',
+    				'800': 'hsl(305 100% 45%)',
+    				'900': 'hsl(300 100% 40%)',
+    			},
+    			'purple': {
+    				'50': 'hsl(290 100% 97%)',
+    				'100': 'hsl(285 100% 95%)',
+    				'200': 'hsl(280 100% 90%)',
+    				'300': 'hsl(275 100% 85%)',
+    				'400': 'hsl(270 100% 80%)',
+    				'500': 'hsl(280 100% 70%)',
+    				'600': 'hsl(275 100% 65%)',
+    				'700': 'hsl(270 100% 60%)',
+    				'800': 'hsl(265 100% 55%)',
+    				'900': 'hsl(260 100% 50%)',
+    			}
     		}
     	}
     }

@@ -21,92 +21,92 @@
   }
   
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.75rem;
+    --background: 350 100% 98%;          /* Very light pink background */
+    --foreground: 330 15% 15%;           /* Dark pink-brown text */
+    --card: 350 100% 97%;                /* Slightly darker pink card background */
+    --card-foreground: 330 15% 15%;      /* Dark pink-brown card text */
+    --popover: 350 100% 97%;             /* Light pink popover */
+    --popover-foreground: 330 15% 15%;   /* Dark pink-brown popover text */
+    --primary: 320 100% 60%;             /* Bright pink primary */
+    --primary-foreground: 0 0% 100%;     /* White text on pink */
+    --secondary: 340 100% 95%;           /* Very light pink secondary */
+    --secondary-foreground: 330 15% 25%; /* Dark pink secondary text */
+    --muted: 340 100% 95%;               /* Very light pink muted */
+    --muted-foreground: 330 20% 50%;     /* Medium pink muted text */
+    --accent: 280 100% 85%;              /* Light purple accent */
+    --accent-foreground: 330 15% 15%;    /* Dark pink accent text */
+    --destructive: 0 84.2% 60.2%;        /* Keep destructive red */
+    --destructive-foreground: 0 0% 98%;  /* White destructive text */
+    --border: 340 50% 88%;               /* Light pink border */
+    --input: 340 50% 90%;                /* Light pink input */
+    --ring: 320 100% 60%;                /* Pink ring */
+    --chart-1: 320 70% 65%;              /* Pink chart colors */
+    --chart-2: 280 60% 70%;              /* Purple chart colors */
+    --chart-3: 300 50% 75%;              /* Light purple chart */
+    --chart-4: 340 80% 70%;              /* Bright pink chart */
+    --chart-5: 260 70% 75%;              /* Lavender chart */
+    --radius: 1rem;                      /* More rounded for girly feel */
     
     /* Tag color lightness values for light mode */
-    --tag-default-lightness: 35%;
-    --tag-selected-lightness: 30%;
-    --tag-filter-lightness: 35%;
+    --tag-default-lightness: 75%;
+    --tag-selected-lightness: 65%;
+    --tag-filter-lightness: 70%;
     
-    /* Gradient colors for consistent theming */
-    --gradient-primary: 217 91% 60%;     /* blue-500 */
-    --gradient-secondary: 262 83% 58%;   /* purple-600 */
-    --gradient-primary-hover: 213 93% 55%; /* blue-600 */
-    --gradient-secondary-hover: 258 90% 66%; /* purple-700 */
-    --gradient-primary-light: 213 96% 87%; /* blue-400 */
-    --gradient-secondary-light: 266 85% 78%; /* purple-400 */
-    --gradient-primary-subtle: 217 91% 60%; /* blue-500 with opacity */
-    --gradient-secondary-subtle: 262 83% 58%; /* purple-600 with opacity */
-    --glow-primary: 217 91% 60%;
-    --glow-secondary: 262 83% 58%;
+    /* Pink and purple gradient colors for girly theme */
+    --gradient-primary: 320 100% 60%;       /* Bright pink */
+    --gradient-secondary: 280 100% 70%;     /* Bright purple */
+    --gradient-primary-hover: 315 100% 55%; /* Darker pink hover */
+    --gradient-secondary-hover: 275 100% 65%; /* Darker purple hover */
+    --gradient-primary-light: 320 100% 85%; /* Light pink */
+    --gradient-secondary-light: 280 100% 90%; /* Light purple */
+    --gradient-primary-subtle: 320 100% 60%; /* Pink with opacity */
+    --gradient-secondary-subtle: 280 100% 70%; /* Purple with opacity */
+    --glow-primary: 320 100% 60%;           /* Pink glow */
+    --glow-secondary: 280 100% 70%;         /* Purple glow */
   }
   
   .dark {
-    --background: 220 23% 6%;
-    --foreground: 0 0% 98%;
-    --card: 220 23% 8%;
-    --card-foreground: 0 0% 98%;
-    --popover: 220 23% 8%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 240 100% 60%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 220 23% 12%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 220 23% 12%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 280 100% 60%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 220 23% 15%;
-    --input: 220 23% 15%;
-    --ring: 240 100% 60%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: 320 30% 8%;            /* Dark pink-purple background */
+    --foreground: 340 50% 95%;           /* Light pink foreground */
+    --card: 320 25% 12%;                 /* Dark pink card */
+    --card-foreground: 340 50% 95%;      /* Light pink card text */
+    --popover: 320 25% 12%;              /* Dark pink popover */
+    --popover-foreground: 340 50% 95%;   /* Light pink popover text */
+    --primary: 320 100% 70%;             /* Bright pink primary */
+    --primary-foreground: 330 30% 15%;   /* Dark text on pink */
+    --secondary: 320 20% 18%;            /* Dark pink secondary */
+    --secondary-foreground: 340 50% 90%; /* Light pink secondary text */
+    --muted: 320 20% 18%;                /* Dark pink muted */
+    --muted-foreground: 340 30% 70%;     /* Medium pink muted text */
+    --accent: 280 100% 75%;              /* Bright purple accent */
+    --accent-foreground: 280 30% 15%;    /* Dark text on purple */
+    --destructive: 0 62.8% 50%;          /* Darker red for dark mode */
+    --destructive-foreground: 0 0% 98%;  /* White destructive text */
+    --border: 320 25% 25%;               /* Dark pink border */
+    --input: 320 25% 22%;                /* Dark pink input */
+    --ring: 320 100% 70%;                /* Pink ring */
+    --chart-1: 320 70% 60%;              /* Pink chart colors */
+    --chart-2: 280 60% 65%;              /* Purple chart colors */
+    --chart-3: 300 50% 70%;              /* Light purple chart */
+    --chart-4: 340 80% 65%;              /* Bright pink chart */
+    --chart-5: 260 70% 70%;              /* Lavender chart */
     
     /* Tag color lightness values for dark mode */
     --tag-default-lightness: 65%;
     --tag-selected-lightness: 70%;
     --tag-filter-lightness: 65%;
     
-    /* Gradient colors for consistent theming */
-    --gradient-primary: 217 91% 60%;     /* blue-500 */
-    --gradient-secondary: 262 83% 58%;   /* purple-600 */
-    --gradient-primary-hover: 213 93% 55%; /* blue-600 */
-    --gradient-secondary-hover: 258 90% 66%; /* purple-700 */
-    --gradient-primary-light: 213 96% 87%; /* blue-400 */
-    --gradient-secondary-light: 266 85% 78%; /* purple-400 */
-    --gradient-primary-subtle: 217 91% 60%; /* blue-500 with opacity */
-    --gradient-secondary-subtle: 262 83% 58%; /* purple-600 with opacity */
-    --glow-primary: 217 91% 60%;
-    --glow-secondary: 262 83% 58%;
+    /* Pink and purple gradient colors for dark mode */
+    --gradient-primary: 320 100% 70%;       /* Brighter pink for dark mode */
+    --gradient-secondary: 280 100% 75%;     /* Brighter purple for dark mode */
+    --gradient-primary-hover: 315 100% 65%; /* Pink hover */
+    --gradient-secondary-hover: 275 100% 70%; /* Purple hover */
+    --gradient-primary-light: 320 100% 80%; /* Light pink */
+    --gradient-secondary-light: 280 100% 85%; /* Light purple */
+    --gradient-primary-subtle: 320 100% 70%; /* Pink with opacity */
+    --gradient-secondary-subtle: 280 100% 75%; /* Purple with opacity */
+    --glow-primary: 320 100% 70%;           /* Pink glow */
+    --glow-secondary: 280 100% 75%;         /* Purple glow */
   }
 }
 
@@ -126,49 +126,95 @@
   
   .glow-border {
     @apply border border-transparent bg-gradient-to-r from-gradient-primary-subtle/20 to-gradient-secondary-subtle/20 bg-clip-border;
-    box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.1), 0 0 40px hsl(var(--glow-secondary) / 0.1);
+    box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.15), 0 0 40px hsl(var(--glow-secondary) / 0.15);
   }
   
   .glow-border:hover {
-    box-shadow: 0 0 30px hsl(var(--glow-primary) / 0.2), 0 0 60px hsl(var(--glow-secondary) / 0.2);
+    box-shadow: 0 0 30px hsl(var(--glow-primary) / 0.25), 0 0 60px hsl(var(--glow-secondary) / 0.25);
   }
   
   .modern-card {
-    @apply bg-card border border-border rounded-xl p-6 transition-all duration-300;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    @apply bg-card border border-border rounded-2xl p-6 transition-all duration-500;
+    box-shadow: 0 8px 25px -8px hsl(var(--gradient-primary) / 0.15), 0 4px 10px -4px hsl(var(--gradient-secondary) / 0.1);
   }
   
   .modern-card:hover {
-    @apply border-gradient-primary/30 dark:border-gradient-secondary/30;
-    box-shadow: 0 10px 25px -3px hsl(var(--gradient-primary) / 0.1), 0 4px 6px -2px hsl(var(--gradient-secondary) / 0.1);
+    @apply border-gradient-primary/40 dark:border-gradient-secondary/40;
+    box-shadow: 0 20px 40px -8px hsl(var(--gradient-primary) / 0.2), 0 8px 16px -4px hsl(var(--gradient-secondary) / 0.15);
+    transform: translateY(-2px) scale(1.02);
   }
   
   .modern-button {
-    @apply bg-gradient-to-r from-gradient-primary to-gradient-secondary hover:from-gradient-primary-hover hover:to-gradient-secondary-hover text-white font-medium px-6 py-3 rounded-xl transition-all duration-300;
-    box-shadow: 0 4px 14px 0 hsl(var(--gradient-primary) / 0.3);
+    @apply bg-gradient-to-r from-gradient-primary to-gradient-secondary hover:from-gradient-primary-hover hover:to-gradient-secondary-hover text-white font-medium px-8 py-4 rounded-2xl transition-all duration-300;
+    box-shadow: 0 8px 20px 0 hsl(var(--gradient-primary) / 0.3), 0 4px 12px 0 hsl(var(--gradient-secondary) / 0.2);
   }
   
   .modern-button:hover {
-    box-shadow: 0 6px 20px 0 hsl(var(--gradient-primary) / 0.4);
-    transform: translateY(-1px);
+    box-shadow: 0 12px 30px 0 hsl(var(--gradient-primary) / 0.4), 0 6px 16px 0 hsl(var(--gradient-secondary) / 0.3);
+    transform: translateY(-2px) scale(1.05);
   }
   
   .toggle-button-active {
-    @apply bg-gradient-to-r from-gradient-primary to-gradient-secondary text-white font-medium transition-all duration-300;
-    box-shadow: 0 4px 14px 0 hsl(var(--gradient-primary) / 0.3);
+    @apply bg-gradient-to-r from-gradient-primary to-gradient-secondary text-white font-medium transition-all duration-300 rounded-2xl;
+    box-shadow: 0 6px 16px 0 hsl(var(--gradient-primary) / 0.3);
   }
   
   .toggle-button-active:hover {
     @apply from-gradient-primary-hover to-gradient-secondary-hover;
-    box-shadow: 0 6px 20px 0 hsl(var(--gradient-primary) / 0.4);
+    box-shadow: 0 8px 24px 0 hsl(var(--gradient-primary) / 0.4);
     transform: translateY(-1px);
   }
   
   .toggle-button-inactive {
-    @apply bg-muted text-muted-foreground font-medium transition-all duration-300;
+    @apply bg-muted text-muted-foreground font-medium transition-all duration-300 rounded-2xl;
   }
   
   .toggle-button-inactive:hover {
     @apply bg-muted/80;
+    transform: translateY(-1px);
   }
+  
+  /* Additional girly design elements */
+  .girly-card {
+    @apply bg-gradient-to-br from-card via-card to-accent/10 border-2 border-gradient-primary/20 rounded-3xl p-8 transition-all duration-500;
+    box-shadow: 0 12px 30px -8px hsl(var(--gradient-primary) / 0.2), 0 6px 16px -4px hsl(var(--gradient-secondary) / 0.15);
+  }
+  
+  .girly-card:hover {
+    @apply border-gradient-primary/40;
+    box-shadow: 0 20px 50px -8px hsl(var(--gradient-primary) / 0.3), 0 10px 25px -4px hsl(var(--gradient-secondary) / 0.2);
+    transform: translateY(-4px) scale(1.02);
+  }
+  
+  .sparkle-text {
+    @apply bg-gradient-to-r from-gradient-primary via-gradient-secondary to-gradient-primary bg-clip-text text-transparent animate-pulse;
+    background-size: 200% 100%;
+    animation: sparkle 3s ease-in-out infinite;
+  }
+  
+  .soft-shadow {
+    box-shadow: 0 10px 30px -10px hsl(var(--gradient-primary) / 0.2), 0 4px 12px -4px hsl(var(--gradient-secondary) / 0.15);
+  }
+  
+  .dreamy-button {
+    @apply bg-gradient-to-r from-gradient-primary/90 via-gradient-secondary/90 to-gradient-primary/90 hover:from-gradient-primary hover:via-gradient-secondary hover:to-gradient-primary text-white font-semibold px-8 py-4 rounded-full transition-all duration-500;
+    box-shadow: 0 8px 25px hsl(var(--gradient-primary) / 0.4), 0 4px 15px hsl(var(--gradient-secondary) / 0.3);
+    background-size: 200% 100%;
+    animation: shimmer 4s ease-in-out infinite;
+  }
+  
+  .dreamy-button:hover {
+    box-shadow: 0 15px 40px hsl(var(--gradient-primary) / 0.5), 0 8px 25px hsl(var(--gradient-secondary) / 0.4);
+    transform: translateY(-3px) scale(1.05);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }

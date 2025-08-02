@@ -31,8 +31,8 @@ export const Route = createRootRouteWithContext<{
         content: "width=device-width, initial-scale=1",
       },
       ...seo({
-        title: "The Art Station",
-        description: `A place to post and sell your art.`,
+        title: "Addie's Art Station",
+        description: `Welcome to Addie's Art Station - where creativity meets beauty! Browse and purchase original artwork created with love and imagination.`,
       }),
     ],
     links: [

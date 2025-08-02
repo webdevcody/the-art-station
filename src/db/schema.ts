@@ -151,6 +151,15 @@ export const orderItemRelations = relations(orderItem, ({ one }) => ({
   }),
 }));
 
+export const contact = pgTable("contact", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  subject: text("subject").notNull(),
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at").notNull(),
+});
+
 export type User = typeof user.$inferSelect;
 export type Session = typeof session.$inferSelect;
 export type Account = typeof account.$inferSelect;
@@ -158,3 +167,4 @@ export type Verification = typeof verification.$inferSelect;
 export type Artwork = typeof artwork.$inferSelect;
 export type Order = typeof order.$inferSelect;
 export type OrderItem = typeof orderItem.$inferSelect;
+export type Contact = typeof contact.$inferSelect;
