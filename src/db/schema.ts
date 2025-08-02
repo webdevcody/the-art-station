@@ -4,6 +4,7 @@ import {
   timestamp,
   pgTable,
   integer,
+  unique,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -120,18 +121,22 @@ export const orderRelations = relations(order, ({ many }) => ({
   orderItems: many(orderItem),
 }));
 
-export const orderItem = pgTable("order_item", {
-  id: text("id").primaryKey(),
-  orderId: text("order_id")
-    .notNull()
-    .references(() => order.id),
-  artworkId: text("artwork_id")
-    .notNull()
-    .references(() => artwork.id),
-  quantity: integer("quantity").notNull().default(1),
-  priceAtTime: integer("price_at_time").notNull(), // in cents, price when purchased
-  createdAt: timestamp("created_at").notNull(),
-});
+export const orderItem = pgTable(
+  "order_item",
+  {
+    id: text("id").primaryKey(),
+    orderId: text("order_id")
+      .notNull()
+      .references(() => order.id),
+    artworkId: text("artwork_id")
+      .notNull()
+      .references(() => artwork.id),
+    quantity: integer("quantity").notNull().default(1),
+    priceAtTime: integer("price_at_time").notNull(), // in cents, price when purchased
+    createdAt: timestamp("created_at").notNull(),
+  },
+  (table) => [unique().on(table.artworkId)]
+);
 
 export const orderItemRelations = relations(orderItem, ({ one }) => ({
   order: one(order, {
